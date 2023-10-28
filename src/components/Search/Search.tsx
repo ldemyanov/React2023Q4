@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import classes from './style.module.scss';
+import SearchSVG from "../../assets/search.svg?react";
 
 type SearchProps = {
   setSearchQuery: (words: string) => void;
@@ -14,10 +16,23 @@ class Search extends Component<SearchProps, SearchState> {
 
   render() {
     return (
-      <>
-        <input onChange={(event) => this.props.setSearchQuery(event.target.value)}/>
-        <button onClick={(event) => this.props.toSearch(event)}>Search</button>
-      </>
+      <div className={classes.container}>
+        <span className={classes.inputBox}>
+          <SearchSVG />
+          <input
+            type='text'
+            onChange={(event) => this.props.setSearchQuery(event.target.value)}
+            placeholder="Please, input person name"
+          />
+        </span>
+
+        <button
+          className={classes.button}
+          onClick={(event) => this.props.toSearch(event)}
+        >
+          Search
+        </button>
+      </div>
     );
   }
 }

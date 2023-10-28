@@ -1,4 +1,4 @@
-import { PersonList } from "./PersonList";
+import { CharacterList } from "./CharacterList";
 import { Search } from "./Search";
 
-export { PersonList, Search };
+export { CharacterList, Search };

@@ -1,23 +1,27 @@
-export interface IPerson {
-  "name": string,
-  "height": string,
-  "mass": string,
-  "hair_color": string,
-  "skin_color": string,
-  "eye_color": string,
-  "birth_year": string,
-  "gender": string,
-  "homeworld": string,
-  "films": string[],
-  "species": string[],
-  "vehicles": string[],
-  "starships": string[],
-  "created": string,
-  "edited": string,
-  "url": string,
+/** 
+ * Prefices:
+ * I - Interface
+ * T - Type
+ * F - Function
+ **/
+
+
+export interface ICharacter {
+  id: number,
+  name: string,
+  status: string,
+  species: string,
+  gender: string,
+  image: string,
+  url: string,
 }
 
-export interface ISearchPersonResult {
+export type TCharactersResult = {
   count: number,
-  results: IPerson[],
+  next: string | null,
+  pages: number,
+  prev: string | null,
+  results: ICharacter[],
 }
+
+export type FgetCharacters = (queryString: string) => Promise<TCharactersResult>;

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { IPerson } from '../../types';
-import { PersonCard } from './PersonCard';
+import { ICharacter } from '../../types';
+import classes from './stye.module.scss';
+import { CharacterCard } from './CharacterCard';
 
 type PersonListProps = {
-  persons: IPerson[];
+  persons: ICharacter[];
 };
 
 class PersonList extends Component<PersonListProps> {
@@ -13,11 +14,13 @@ class PersonList extends Component<PersonListProps> {
 
   render() {
     return (
-      <ul>
+      <>
+      <div className={classes.cardList}>
         {this.props.persons.map((person, index) => (
-          <PersonCard key={index} person={person} />
+          <CharacterCard key={index} person={person} />
         ))}
-      </ul>
+      </div>
+      </>
     );
   }
 }

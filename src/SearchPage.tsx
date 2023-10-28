@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { Search, PersonList } from './components';
-import { IPerson } from './types';
-import { getPersonByName } from './api/swapi';
+import { Search, CharacterList } from './components';
+import { ICharacter } from './types';
+// import { getPersonByName } from './api/swapi';
+import classes from './style.module.scss';
+import { getCharacters } from './api/rickandmortyapi';
 
 type SearchPageProps = {};
 
 type SearchPageState = {
-  persons: IPerson[];
+  persons: ICharacter[];
   searchQuery: string;
 };
 
@@ -25,15 +27,21 @@ class SearchPage extends Component<SearchPageProps, SearchPageState> {
   };
 
   toSearch = async () => {
-    const { count, results } = await getPersonByName(this.state.searchQuery);
+    const { count, results } = await getCharacters(this.state.searchQuery);
     this.setState({ persons: results });
   };
 
   render() {
     return (
       <>
-        <Search setSearchQuery={this.setSearchQuery} toSearch={this.toSearch} />
-        <PersonList persons={this.state.persons} />
+        <header className={classes.header}>
+          <Search
+            setSearchQuery={this.setSearchQuery}
+            toSearch={this.toSearch}
+          />
+        </header>
+
+        <CharacterList persons={this.state.persons}/>
       </>
     );
   }
