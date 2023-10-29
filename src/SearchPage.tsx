@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Search, CharacterList } from './components';
+import { Search, CharacterList, Loader } from './components';
 import { ICharacter } from './types';
-// import { getPersonByName } from './api/swapi';
 import classes from './style.module.scss';
 import { getCharacters } from './api/rickandmortyapi';
 
@@ -12,6 +11,7 @@ type SearchPageState = {
   searchQuery: string;
   message: string;
   error: boolean;
+  isLoading: boolean;
 };
 
 class SearchPage extends Component<SearchPageProps, SearchPageState> {
@@ -25,6 +25,7 @@ class SearchPage extends Component<SearchPageProps, SearchPageState> {
       searchQuery: localStorage.getItem('searchQuery') ?? '',
       message: this.defaultMessage,
       error: false,
+      isLoading: false,
     };
   }
 
@@ -34,29 +35,14 @@ class SearchPage extends Component<SearchPageProps, SearchPageState> {
   };
 
   toSearch = async () => {
-    try {
-      const res = await getCharacters(this.state.searchQuery);
-      this.setState({
-        persons: res.results,
-        error: false,
-        message: this.defaultMessage,
-      });
-    } catch (error: unknown) {
-      const mes: string = 'Uppss, error';
-
-      // if (error.status >= 500) {
-      //   mes = 'Internal api server error :(';
-      // }
-      // if (error.status >= 400 && error.status < 500) {
-      //   mes = 'Not Found';
-      // }
-
-      this.setState({
-        persons: [],
-        message: mes,
-        error: true,
-      });
-    }
+    this.setState({ isLoading: true }, () => {
+      getCharacters(this.state.searchQuery).then((res) =>
+        this.setState({
+          isLoading: false,
+          persons: res.results,
+        })
+      );
+    });
   };
 
   render() {
@@ -68,13 +54,20 @@ class SearchPage extends Component<SearchPageProps, SearchPageState> {
             searchQuery={this.state.searchQuery}
             toSearch={this.toSearch}
           />
+          <button onClick={() => 25 / 0}>Error btn</button>
         </header>
 
-        <CharacterList
-          persons={this.state.persons}
-          error={this.state.error}
-          message={this.state.message}
-        />
+        {!this.state.isLoading ? (
+          <CharacterList
+            persons={this.state.persons}
+            error={this.state.error}
+            message={this.state.message}
+          />
+        ) : (
+          <div className={classes.loaderContainer}>
+            <Loader />
+          </div>
+        )}
       </>
     );
   }
