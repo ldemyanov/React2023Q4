@@ -12,7 +12,6 @@ class ChararcterCard extends Component<ChararcterCardProps> {
   }
 
   render() {
-    console.log(this.props.person);
     const { name, gender, image, status, species } = this.props.person;
 
     return (

@@ -10,25 +10,53 @@ type SearchPageProps = {};
 type SearchPageState = {
   persons: ICharacter[];
   searchQuery: string;
+  message: string;
+  error: boolean;
 };
 
 class SearchPage extends Component<SearchPageProps, SearchPageState> {
+
+  defaultMessage: string = "Find your favorite character in the cartoon Rick and Morty";
+
   constructor(props: SearchPageProps) {
     super(props);
     this.state = {
       persons: [],
-      searchQuery: '',
+      searchQuery: localStorage.getItem("searchQuery") ?? "",
+      message: this.defaultMessage,
+      error: false,
     };
   }
 
-  setSearchQuery = (words: string) => {
-    this.setState({ searchQuery: words });
-    console.log(this.state);
+  setSearchQuery = (searchQuery: string) => {
+    this.setState({ searchQuery });
+    localStorage.setItem("searchQuery", searchQuery);
   };
 
   toSearch = async () => {
-    const { count, results } = await getCharacters(this.state.searchQuery);
-    this.setState({ persons: results });
+    try {
+      const res = await getCharacters(this.state.searchQuery);
+      this.setState({
+        persons: res.results,
+        error: false,
+        message: this.defaultMessage
+      });
+    } catch (error: any) {
+      let mes: string = "Uppss, error";
+
+      if (error.status >= 500) {
+        mes = "Internal api server error :(";
+      }
+      if (error.status >= 400 && error.status < 500) {
+        mes = "Not Found";
+      }
+
+      this.setState({
+        persons: [],
+        message: mes,
+        error: true,
+      })
+    }
   };
 
   render() {
@@ -37,11 +65,16 @@ class SearchPage extends Component<SearchPageProps, SearchPageState> {
         <header className={classes.header}>
           <Search
             setSearchQuery={this.setSearchQuery}
+            searchQuery={this.state.searchQuery}
             toSearch={this.toSearch}
           />
         </header>
 
-        <CharacterList persons={this.state.persons}/>
+        <CharacterList
+          persons={this.state.persons}
+          error={this.state.error}
+          message={this.state.message}
+        />
       </>
     );
   }

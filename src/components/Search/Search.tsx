@@ -3,6 +3,7 @@ import classes from './style.module.scss';
 import SearchSVG from "../../assets/search.svg?react";
 
 type SearchProps = {
+  searchQuery: string;
   setSearchQuery: (words: string) => void;
   toSearch: (event: React.MouseEvent<HTMLElement>) => void;
 };
@@ -23,6 +24,7 @@ class Search extends Component<SearchProps, SearchState> {
             type='text'
             onChange={(event) => this.props.setSearchQuery(event.target.value)}
             placeholder="Please, input person name"
+            value={this.props.searchQuery}
           />
         </span>
 
