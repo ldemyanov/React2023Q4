@@ -5,7 +5,7 @@ import { ICharacter } from './types';
 import classes from './style.module.scss';
 import { getCharacters } from './api/rickandmortyapi';
 
-type SearchPageProps = {};
+type SearchPageProps = object;
 
 type SearchPageState = {
   persons: ICharacter[];
@@ -15,14 +15,14 @@ type SearchPageState = {
 };
 
 class SearchPage extends Component<SearchPageProps, SearchPageState> {
-
-  defaultMessage: string = "Find your favorite character in the cartoon Rick and Morty";
+  defaultMessage: string =
+    'Find your favorite character in the cartoon Rick and Morty';
 
   constructor(props: SearchPageProps) {
     super(props);
     this.state = {
       persons: [],
-      searchQuery: localStorage.getItem("searchQuery") ?? "",
+      searchQuery: localStorage.getItem('searchQuery') ?? '',
       message: this.defaultMessage,
       error: false,
     };
@@ -30,7 +30,7 @@ class SearchPage extends Component<SearchPageProps, SearchPageState> {
 
   setSearchQuery = (searchQuery: string) => {
     this.setState({ searchQuery });
-    localStorage.setItem("searchQuery", searchQuery);
+    localStorage.setItem('searchQuery', searchQuery);
   };
 
   toSearch = async () => {
@@ -39,23 +39,23 @@ class SearchPage extends Component<SearchPageProps, SearchPageState> {
       this.setState({
         persons: res.results,
         error: false,
-        message: this.defaultMessage
+        message: this.defaultMessage,
       });
-    } catch (error: any) {
-      let mes: string = "Uppss, error";
+    } catch (error: unknown) {
+      const mes: string = 'Uppss, error';
 
-      if (error.status >= 500) {
-        mes = "Internal api server error :(";
-      }
-      if (error.status >= 400 && error.status < 500) {
-        mes = "Not Found";
-      }
+      // if (error.status >= 500) {
+      //   mes = 'Internal api server error :(';
+      // }
+      // if (error.status >= 400 && error.status < 500) {
+      //   mes = 'Not Found';
+      // }
 
       this.setState({
         persons: [],
         message: mes,
         error: true,
-      })
+      });
     }
   };
 

@@ -1,4 +1,4 @@
-import { CharacterList } from "./CharacterList";
-import { Search } from "./Search";
+import { CharacterList } from './CharacterList';
+import { Search } from './Search';
 
 export { CharacterList, Search };

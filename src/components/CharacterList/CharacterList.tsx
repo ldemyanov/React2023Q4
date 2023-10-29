@@ -17,11 +17,11 @@ class PersonList extends Component<PersonListProps> {
   render() {
     const { error, message, persons } = this.props;
 
-    console.log("Render Person List");
+    console.log('Render Person List');
 
     return (
       <>
-        {(!error && PersonList.length) ? (
+        {!error && PersonList.length ? (
           <div className={classes.cardList}>
             {persons.map((person, index) => (
               <CharacterCard key={index} person={person} />

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import classes from './style.module.scss';
-import SearchSVG from "../../assets/search.svg?react";
+import SearchSVG from '../../assets/search.svg?react';
 
 type SearchProps = {
   searchQuery: string;
@@ -8,7 +8,7 @@ type SearchProps = {
   toSearch: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
-type SearchState = {};
+type SearchState = object;
 
 class Search extends Component<SearchProps, SearchState> {
   constructor(props: SearchProps) {
@@ -21,7 +21,7 @@ class Search extends Component<SearchProps, SearchState> {
         <span className={classes.inputBox}>
           <SearchSVG />
           <input
-            type='text'
+            type="text"
             onChange={(event) => this.props.setSearchQuery(event.target.value)}
             placeholder="Please, input person name"
             value={this.props.searchQuery}
