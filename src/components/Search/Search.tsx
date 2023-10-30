@@ -22,12 +22,12 @@ class Search extends Component<SearchProps, SearchState> {
   };
 
   getError = () => {
-    this.props.setSearchQuery('Bomb');
+    this.props.setSearchQuery('Secret Error');
   };
 
   render() {
-    if (this.props.searchQuery === 'Bomb') {
-      throw Error('Bomb');
+    if (this.props.searchQuery === 'Secret Error') {
+      throw Error('Click on error button');
     }
 
     return (
