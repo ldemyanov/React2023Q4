@@ -1,0 +1,26 @@
+.card {
+  @apply flex flex-col border-stone-700 bg-stone-800 border-solid p-4;
+  width: 330px;
+  min-height: 420px;
+  border-width: 1px;
+
+  .name {
+    @apply inline-block text-xl text-stone-100 font-semibold text-center w-full;
+  }
+
+  .line {
+    @apply flex border-b border-stone-600 py-1;
+  }
+
+  .label {
+    @apply inline-block text-stone-300 pl-4 mr-auto;
+  }
+
+  .property {
+    @apply inline-block text-slate-200 font-semibold pr-4;
+  }
+
+  .image {
+    @apply my-4 rounded-lg max-w-full h-auto border-solid border-stone-300;
+  }
+}

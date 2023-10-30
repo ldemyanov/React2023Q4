@@ -1,0 +1,21 @@
+body {
+  @apply bg-stone-900;
+}
+
+.b1440 {
+  width: 100%;
+  max-width: 1440px;
+  height: 100px;
+  display: block;
+  margin: auto;
+  border-bottom: 1px solid rgb(124, 32, 32);
+}
+
+.header {
+  @apply b1440;
+}
+
+.loaderContainer {
+  width: fit-content;
+  margin: 20px auto;
+}
