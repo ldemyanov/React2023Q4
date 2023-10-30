@@ -61,6 +61,10 @@ class SearchPage extends Component<SearchPageProps, SearchPageState> {
     });
   };
 
+  componentDidMount() {
+    this.toSearch();
+  }
+
   render() {
     return (
       <>
