@@ -34,14 +34,27 @@ class SearchPage extends Component<SearchPageProps, SearchPageState> {
     localStorage.setItem('searchQuery', searchQuery);
   };
 
-  toSearch = async () => {
+  toSearch = () => {
     this.setState({ isLoading: true }, () => {
-      getCharacters(this.state.searchQuery).then((res) =>
-        this.setState({
-          isLoading: false,
-          persons: res.results,
-        })
-      );
+      getCharacters(this.state.searchQuery)
+        .then((res) =>
+          this.setState({
+            isLoading: false,
+            persons: res.results,
+          })
+        )
+        .catch((error: { message: string; status: number }) => {
+          this.setState({
+            isLoading: false,
+            persons: [],
+            error: true,
+            message: error.status === 404 ? 'Not found' : error.message,
+          });
+
+          if (error.status === 404) {
+            throw Error('Uncknown Error!');
+          }
+        });
     });
   };
 
@@ -54,7 +67,6 @@ class SearchPage extends Component<SearchPageProps, SearchPageState> {
             searchQuery={this.state.searchQuery}
             toSearch={this.toSearch}
           />
-          <button onClick={() => 25 / 0}>Error btn</button>
         </header>
 
         {!this.state.isLoading ? (

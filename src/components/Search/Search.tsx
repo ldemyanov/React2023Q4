@@ -5,7 +5,7 @@ import SearchSVG from '../../assets/search.svg?react';
 type SearchProps = {
   searchQuery: string;
   setSearchQuery: (words: string) => void;
-  toSearch: (event: React.MouseEvent<HTMLElement>) => void;
+  toSearch: () => void;
 };
 
 type SearchState = object;
@@ -15,7 +15,21 @@ class Search extends Component<SearchProps, SearchState> {
     super(props);
   }
 
+  keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.code === 'Enter') {
+      this.props.toSearch();
+    }
+  };
+
+  getError = () => {
+    this.props.setSearchQuery('Bomb');
+  }
+
   render() {
+    if (this.props.searchQuery === 'Bomb') {
+      throw Error('Bomb');
+    }
+
     return (
       <div className={classes.container}>
         <span className={classes.inputBox}>
@@ -23,6 +37,7 @@ class Search extends Component<SearchProps, SearchState> {
           <input
             type="text"
             onChange={(event) => this.props.setSearchQuery(event.target.value)}
+            onKeyDown={this.keyDownHandler}
             placeholder="Please, input person name"
             value={this.props.searchQuery}
           />
@@ -30,9 +45,16 @@ class Search extends Component<SearchProps, SearchState> {
 
         <button
           className={classes.button}
-          onClick={(event) => this.props.toSearch(event)}
+          onClick={() => this.props.toSearch()}
         >
           Search
+        </button>
+
+        <button
+          className={classes.button}
+          onClick={this.getError}
+        >
+          Get Error
         </button>
       </div>
     );

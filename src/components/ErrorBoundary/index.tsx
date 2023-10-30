@@ -1,4 +1,5 @@
 import React from 'react';
+import ErrorPage from './ErrorPage';
 
 type ErrorBoundaryProps = {
   children: React.ReactNode;
@@ -17,17 +18,22 @@ class ErrorBoundary extends React.Component<
   }
 
   static getDerivedStateFromError() {
-    // Update state so the next render will show the fallback UI.
     return { hasError: true };
   }
 
+  continueWork = () => {
+    localStorage.clear();
+    this.setState({hasError: false});
+  }
+
   componentDidCatch(error: unknown) {
-    console.error(error);
+    console.error("ComponentDidCatch get error", error);
+    this.setState({hasError: true});
   }
 
   render() {
     if (this.state.hasError) {
-      return <h1>Something went wrong.</h1>;
+      return <ErrorPage continueWork={this.continueWork} />
     }
 
     return this.props.children;

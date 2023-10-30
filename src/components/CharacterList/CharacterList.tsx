@@ -17,20 +17,20 @@ class PersonList extends Component<PersonListProps> {
   render() {
     const { error, message, persons } = this.props;
 
-    console.log('Render Person List');
+    if (!error && persons.length) {
+      return (
+        <div className={classes.cardList}>
+          {persons.map((person, index) => (
+            <CharacterCard key={index} person={person} />
+          ))}
+        </div>
+      );
+    }
 
     return (
-      <>
-        {!error && PersonList.length ? (
-          <div className={classes.cardList}>
-            {persons.map((person, index) => (
-              <CharacterCard key={index} person={person} />
-            ))}
-          </div>
-        ) : (
-          <p className={classes.message}>{message}</p>
-        )}
-      </>
+      <div className={classes.cardList}>
+        <p className={classes.message}>{message}</p>
+      </div>
     );
   }
 }
