@@ -23,7 +23,7 @@ class Search extends Component<SearchProps, SearchState> {
 
   getError = () => {
     this.props.setSearchQuery('Bomb');
-  }
+  };
 
   render() {
     if (this.props.searchQuery === 'Bomb') {
@@ -38,7 +38,7 @@ class Search extends Component<SearchProps, SearchState> {
             type="text"
             onChange={(event) => this.props.setSearchQuery(event.target.value)}
             onKeyDown={this.keyDownHandler}
-            placeholder="Please, input person name"
+            placeholder="Please, input characters name"
             value={this.props.searchQuery}
           />
         </span>
@@ -50,10 +50,7 @@ class Search extends Component<SearchProps, SearchState> {
           Search
         </button>
 
-        <button
-          className={classes.button}
-          onClick={this.getError}
-        >
+        <button className={classes.button} onClick={this.getError}>
           Get Error
         </button>
       </div>

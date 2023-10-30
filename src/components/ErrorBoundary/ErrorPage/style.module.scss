@@ -16,4 +16,9 @@
 .link {
   color: rgb(14, 85, 20);
   font-size: 20px;
+  text-decoration: underline;
+
+  &:hover {
+    color: rgb(117, 134, 42);
+  }
 }

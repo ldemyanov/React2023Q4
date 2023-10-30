@@ -3,7 +3,7 @@ import classes from './style.module.scss';
 import { ICharacter } from '../../../types';
 
 type ChararcterCardProps = {
-  person: ICharacter;
+  character: ICharacter;
 };
 
 class ChararcterCard extends Component<ChararcterCardProps> {
@@ -12,7 +12,7 @@ class ChararcterCard extends Component<ChararcterCardProps> {
   }
 
   render() {
-    const { name, gender, image, status, species } = this.props.person;
+    const { name, gender, image, status, species } = this.props.character;
 
     return (
       <div className={classes.card}>

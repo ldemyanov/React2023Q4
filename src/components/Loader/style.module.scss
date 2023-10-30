@@ -1,9 +1,9 @@
 .loader {
-    display: inline-block;
-    position: relative;
-    width: 80px;
-    height: 80px;
-  }
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
 .loader div {
   position: absolute;
   width: 16px;
@@ -58,11 +58,11 @@
   animation-delay: -1.6s;
 }
 @keyframes lds-grid {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
     opacity: 0.5;
   }
 }
-  

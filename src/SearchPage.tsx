@@ -7,7 +7,7 @@ import { getCharacters } from './api/rickandmortyapi';
 type SearchPageProps = object;
 
 type SearchPageState = {
-  persons: ICharacter[];
+  characters: ICharacter[];
   searchQuery: string;
   message: string;
   error: boolean;
@@ -21,7 +21,7 @@ class SearchPage extends Component<SearchPageProps, SearchPageState> {
   constructor(props: SearchPageProps) {
     super(props);
     this.state = {
-      persons: [],
+      characters: [],
       searchQuery: localStorage.getItem('searchQuery') ?? '',
       message: this.defaultMessage,
       error: false,
@@ -36,17 +36,20 @@ class SearchPage extends Component<SearchPageProps, SearchPageState> {
 
   toSearch = () => {
     this.setState({ isLoading: true }, () => {
-      getCharacters(this.state.searchQuery)
+      const searchString = this.state.searchQuery.trim();
+      getCharacters(searchString)
         .then((res) =>
           this.setState({
             isLoading: false,
-            persons: res.results,
+            error: false,
+            characters: res.results,
+            message: this.defaultMessage,
           })
         )
         .catch((error: { message: string; status: number }) => {
           this.setState({
             isLoading: false,
-            persons: [],
+            characters: [],
             error: true,
             message: error.status === 404 ? 'Not found' : error.message,
           });
@@ -71,7 +74,7 @@ class SearchPage extends Component<SearchPageProps, SearchPageState> {
 
         {!this.state.isLoading ? (
           <CharacterList
-            persons={this.state.persons}
+            characters={this.state.characters}
             error={this.state.error}
             message={this.state.message}
           />

@@ -23,17 +23,17 @@ class ErrorBoundary extends React.Component<
 
   continueWork = () => {
     localStorage.clear();
-    this.setState({hasError: false});
-  }
+    this.setState({ hasError: false });
+  };
 
   componentDidCatch(error: unknown) {
-    console.error("ComponentDidCatch get error", error);
-    this.setState({hasError: true});
+    console.error('ComponentDidCatch get error', error);
+    this.setState({ hasError: true });
   }
 
   render() {
     if (this.state.hasError) {
-      return <ErrorPage continueWork={this.continueWork} />
+      return <ErrorPage continueWork={this.continueWork} />;
     }
 
     return this.props.children;

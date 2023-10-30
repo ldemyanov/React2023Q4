@@ -3,25 +3,25 @@ import { ICharacter } from '../../types';
 import classes from './stye.module.scss';
 import { CharacterCard } from './CharacterCard';
 
-type PersonListProps = {
-  persons: ICharacter[];
+type CharacterListProps = {
+  characters: ICharacter[];
   error: boolean;
   message: string;
 };
 
-class PersonList extends Component<PersonListProps> {
-  constructor(props: PersonListProps) {
+class CharacterList extends Component<CharacterListProps> {
+  constructor(props: CharacterListProps) {
     super(props);
   }
 
   render() {
-    const { error, message, persons } = this.props;
+    const { error, message, characters } = this.props;
 
-    if (!error && persons.length) {
+    if (!error && characters.length) {
       return (
         <div className={classes.cardList}>
-          {persons.map((person, index) => (
-            <CharacterCard key={index} person={person} />
+          {characters.map((character, index) => (
+            <CharacterCard key={index} character={character} />
           ))}
         </div>
       );
@@ -35,4 +35,4 @@ class PersonList extends Component<PersonListProps> {
   }
 }
 
-export default PersonList;
+export default CharacterList;
