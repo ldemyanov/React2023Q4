@@ -15,6 +15,11 @@ export interface ICharacter {
   url: string;
 }
 
+export interface IError {
+  message: string;
+  status: number;
+}
+
 export type TCharactersResult = {
   count: number;
   next: string | null;

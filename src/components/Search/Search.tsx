@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import classes from './style.module.scss';
 import SearchSVG from '../../assets/search.svg?react';
 
@@ -8,54 +8,39 @@ type SearchProps = {
   toSearch: () => void;
 };
 
-type SearchState = object;
-
-class Search extends Component<SearchProps, SearchState> {
-  constructor(props: SearchProps) {
-    super(props);
-  }
-
-  keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+function Search(props: SearchProps) {
+  const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.code === 'Enter') {
-      this.props.toSearch();
+      props.toSearch();
     }
   };
 
-  getError = () => {
-    this.props.setSearchQuery('Secret Error');
+  const getError = () => {
+    props.setSearchQuery('Secret Error');
   };
 
-  render() {
-    if (this.props.searchQuery === 'Secret Error') {
-      throw Error('Click on error button');
-    }
+  return (
+    <div className={classes.container}>
+      <span className={classes.inputBox}>
+        <SearchSVG />
+        <input
+          type="text"
+          onChange={(event) => props.setSearchQuery(event.target.value)}
+          onKeyDown={keyDownHandler}
+          placeholder="Please, input characters name"
+          value={props.searchQuery}
+        />
+      </span>
 
-    return (
-      <div className={classes.container}>
-        <span className={classes.inputBox}>
-          <SearchSVG />
-          <input
-            type="text"
-            onChange={(event) => this.props.setSearchQuery(event.target.value)}
-            onKeyDown={this.keyDownHandler}
-            placeholder="Please, input characters name"
-            value={this.props.searchQuery}
-          />
-        </span>
+      <button className={classes.button} onClick={() => props.toSearch()}>
+        Search
+      </button>
 
-        <button
-          className={classes.button}
-          onClick={() => this.props.toSearch()}
-        >
-          Search
-        </button>
-
-        <button className={classes.button} onClick={this.getError}>
-          Get Error
-        </button>
-      </div>
-    );
-  }
+      <button className={classes.button} onClick={getError}>
+        Get Error
+      </button>
+    </div>
+  );
 }
 
 export default Search;

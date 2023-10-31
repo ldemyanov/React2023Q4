@@ -1,95 +1,69 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Search, CharacterList, Loader } from './components';
 import { ICharacter } from './types';
 import classes from './style.module.scss';
 import { getCharacters } from './api/rickandmortyapi';
+import { NetworkError } from './errors';
 
-type SearchPageProps = object;
+function SearchPage() {
+  const [characters, setCharacters] = useState<ICharacter[]>([]);
+  const [message, setMessage] = useState<string>('');
+  const [error, setError] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [searchString, setSearchString] = useState<string>(
+    localStorage.getItem('searchQuery') ?? ''
+  );
 
-type SearchPageState = {
-  characters: ICharacter[];
-  searchQuery: string;
-  message: string;
-  error: boolean;
-  isLoading: boolean;
-};
-
-class SearchPage extends Component<SearchPageProps, SearchPageState> {
-  defaultMessage: string =
-    'Find your favorite character in the cartoon Rick and Morty';
-
-  constructor(props: SearchPageProps) {
-    super(props);
-    this.state = {
-      characters: [],
-      searchQuery: localStorage.getItem('searchQuery') ?? '',
-      message: this.defaultMessage,
-      error: false,
-      isLoading: false,
-    };
-  }
-
-  setSearchQuery = (searchQuery: string) => {
-    this.setState({ searchQuery });
-    localStorage.setItem('searchQuery', searchQuery);
+  const setSearchQuery = (str: string) => {
+    setSearchString(str);
+    localStorage.setItem('searchQuery', str);
   };
 
-  toSearch = () => {
-    this.setState({ isLoading: true }, () => {
-      const searchString = this.state.searchQuery.trim();
-      getCharacters(searchString)
-        .then((res) =>
-          this.setState({
-            isLoading: false,
-            error: false,
-            characters: res.results,
-            message: this.defaultMessage,
-          })
-        )
-        .catch((error: { message: string; status: number }) => {
-          this.setState({
-            isLoading: false,
-            characters: [],
-            error: true,
-            message: error.status === 404 ? 'Not found' : error.message,
-          });
+  const toSearch = useCallback(async () => {
+    setLoading(true);
+    setSearchString(searchString.trim());
+    try {
+      const { results } = await getCharacters(searchString);
+      setCharacters(results);
+    } catch (error: unknown) {
+      setCharacters([]);
+      setError(true);
+      let message = 'Unknown Error';
+      if (error instanceof NetworkError) {
+        message = error.status === 404 ? 'Not found' : error.message;
+      }
+      setMessage(message);
+    }
+    setLoading(false);
+  }, [searchString]);
 
-          if (error.status === 404) {
-            throw Error('Uncknown Error!');
-          }
-        });
-    });
-  };
+  useEffect(() => {
+    toSearch();
+  }, [searchString, toSearch]);
 
-  componentDidMount() {
-    this.toSearch();
-  }
+  return (
+    <>
+      <header className={classes.header}>
+        <Search
+          setSearchQuery={setSearchQuery}
+          searchQuery={searchString}
+          toSearch={toSearch}
+        />
+      </header>
 
-  render() {
-    return (
-      <>
-        <header className={classes.header}>
-          <Search
-            setSearchQuery={this.setSearchQuery}
-            searchQuery={this.state.searchQuery}
-            toSearch={this.toSearch}
-          />
-        </header>
-
-        {!this.state.isLoading ? (
-          <CharacterList
-            characters={this.state.characters}
-            error={this.state.error}
-            message={this.state.message}
-          />
-        ) : (
-          <div className={classes.loaderContainer}>
-            <Loader />
-          </div>
-        )}
-      </>
-    );
-  }
+      {!isLoading ? (
+        <CharacterList
+          characters={characters}
+          error={error}
+          message={message}
+        />
+      ) : (
+        <div className={classes.loaderContainer}>
+          <Loader />
+        </div>
+      )}
+    </>
+  );
 }
 
 export default SearchPage;
