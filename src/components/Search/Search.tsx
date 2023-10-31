@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './style.module.scss';
 import SearchSVG from '../../assets/search.svg?react';
 
 type SearchProps = {
   searchQuery: string;
   setSearchQuery: (words: string) => void;
-  toSearch: () => void;
 };
 
 function Search(props: SearchProps) {
+  const [searchString, setSearchString] = useState<string>(props.searchQuery);
+
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.code === 'Enter') {
-      props.toSearch();
+      props.setSearchQuery(searchString.trim());
     }
   };
 
@@ -25,14 +26,17 @@ function Search(props: SearchProps) {
         <SearchSVG />
         <input
           type="text"
-          onChange={(event) => props.setSearchQuery(event.target.value)}
+          onChange={(event) => setSearchString(event.target.value)}
           onKeyDown={keyDownHandler}
           placeholder="Please, input characters name"
-          value={props.searchQuery}
+          value={searchString}
         />
       </span>
 
-      <button className={classes.button} onClick={() => props.toSearch()}>
+      <button
+        className={classes.button}
+        onClick={() => props.setSearchQuery(searchString.trim())}
+      >
         Search
       </button>
 
