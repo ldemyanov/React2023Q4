@@ -1,10 +1,10 @@
-import { FgetCharacters } from '../types';
+import { FgetCharacters, FgetEpisodes, IEpisode } from '../types';
 import { NetworkError } from '../errors';
 
 const apiUrl = 'https://rickandmortyapi.com/api';
 
-export const getCharacters: FgetCharacters = async (queryString: string) => {
-  const response = await fetch(`${apiUrl}/character/?name=${queryString}`);
+export const getCharacters: FgetCharacters = async (query) => {
+  const response = await fetch(`${apiUrl}/character/?name=${query}`);
 
   if (!response.ok)
     throw new NetworkError(
@@ -13,4 +13,23 @@ export const getCharacters: FgetCharacters = async (queryString: string) => {
     );
 
   return await response.json();
+};
+
+export const getEpisodes: FgetEpisodes = async (queries) => {
+  const responses = await Promise.all(queries.map((q) => fetch(q)));
+  const episodes: Array<Promise<IEpisode>> = [];
+
+  responses.forEach(async (response) => {
+    if (response.ok) {
+      episodes.push(response.json());
+      return;
+    }
+
+    throw new NetworkError(
+      `Request failed with status ${response.status}`,
+      response.status
+    );
+  });
+
+  return Promise.all(episodes);
 };

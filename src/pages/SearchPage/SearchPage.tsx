@@ -3,7 +3,8 @@ import { Search, CharacterList, Loader } from '../../components';
 import { ICharacter } from '../../types';
 import { getCharacters } from '../../api/rickandmortyapi';
 import { NetworkError } from '../../errors';
-import classes from './style.module.scss';
+import commonClasses from '../../styles/common.module.scss';
+import { DetailCard } from '../../components/DetailCard';
 
 function SearchPage() {
   const [characters, setCharacters] = useState<ICharacter[]>([]);
@@ -43,18 +44,20 @@ function SearchPage() {
 
   return (
     <>
-      <header className={classes.header}>
+      <header className={commonClasses.header}>
         <Search setSearchQuery={setSearchQuery} searchQuery={searchString} />
       </header>
-
       {!isLoading ? (
-        <CharacterList
-          characters={characters}
-          error={error}
-          message={message}
-        />
+        <div className="flex">
+          <CharacterList
+            characters={characters}
+            error={error}
+            message={message}
+          />
+          {characters[0] && <DetailCard character={characters[0]} />}
+        </div>
       ) : (
-        <div className={classes.loaderContainer}>
+        <div className={commonClasses.loaderContainer}>
           <Loader />
         </div>
       )}

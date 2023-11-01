@@ -13,6 +13,25 @@ export interface ICharacter {
   gender: string;
   image: string;
   url: string;
+  episode: string[];
+  origin: {
+    name: string;
+    url: string;
+  };
+  location: {
+    name: string;
+    url: string;
+  };
+}
+
+export interface IEpisode {
+  id: number;
+  name: string;
+  air_date: string;
+  episode: string;
+  characters: string[];
+  url: string;
+  created: string;
 }
 
 export interface IError {
@@ -28,6 +47,6 @@ export type TCharactersResult = {
   results: ICharacter[];
 };
 
-export type FgetCharacters = (
-  queryString: string
-) => Promise<TCharactersResult>;
+export type FgetCharacters = (s: string) => Promise<TCharactersResult>;
+export type FgetEpisodes = (qs: string[]) => Promise<Array<IEpisode>>;
+export type FgetMatch = (s: string) => string | null;

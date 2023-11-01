@@ -21,7 +21,7 @@ function Search(props: SearchProps) {
   };
 
   return (
-    <div className={classes.container}>
+    <div className={classes.searchBlock}>
       <span className={classes.inputBox}>
         <SearchSVG />
         <input
