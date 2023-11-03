@@ -40,13 +40,20 @@ export interface IError {
 }
 
 export type TCharactersResult = {
-  count: number;
-  next: string | null;
-  pages: number;
-  prev: string | null;
+  info: {
+    count: number;
+    next: string | null;
+    pages: number;
+    prev: string | null;
+  };
   results: ICharacter[];
 };
 
-export type FgetCharacters = (s: string) => Promise<TCharactersResult>;
+export type FgetCharacters = (
+  query: string,
+  pageNumber: string
+) => Promise<TCharactersResult>;
+
 export type FgetEpisodes = (qs: string[]) => Promise<Array<IEpisode>>;
+
 export type FgetMatch = (s: string) => string | null;

@@ -3,8 +3,11 @@ import { NetworkError } from '../errors';
 
 const apiUrl = 'https://rickandmortyapi.com/api';
 
-export const getCharacters: FgetCharacters = async (query) => {
-  const response = await fetch(`${apiUrl}/character/?name=${query}`);
+export const getCharacters: FgetCharacters = async (query, page) => {
+  let urlQuery = `${apiUrl}/character/?name=${query}`;
+  if (page) urlQuery += `&page=${page}`;
+
+  const response = await fetch(urlQuery);
 
   if (!response.ok)
     throw new NetworkError(

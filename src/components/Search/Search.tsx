@@ -5,15 +5,20 @@ import SearchSVG from '../../assets/search.svg?react';
 type SearchProps = {
   searchQuery: string;
   setSearchQuery: (words: string) => void;
+  changePage: (page: number) => void;
+  setStep: (step: number) => void;
 };
 
 function Search(props: SearchProps) {
   const [searchString, setSearchString] = useState<string>(props.searchQuery);
 
+  const startSearch = () => {
+    props.setSearchQuery(searchString.trim());
+    props.changePage(1);
+  };
+
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.code === 'Enter') {
-      props.setSearchQuery(searchString.trim());
-    }
+    if (event.code === 'Enter') startSearch();
   };
 
   const getError = () => {
@@ -22,6 +27,12 @@ function Search(props: SearchProps) {
 
   return (
     <div className={classes.searchBlock}>
+      <input
+        type="number"
+        onChange={(event) => props.setStep(Number(event.target.value))}
+        placeholder="Count cards"
+      />
+
       <span className={classes.inputBox}>
         <SearchSVG />
         <input
@@ -33,10 +44,7 @@ function Search(props: SearchProps) {
         />
       </span>
 
-      <button
-        className={classes.button}
-        onClick={() => props.setSearchQuery(searchString.trim())}
-      >
+      <button className={classes.button} onClick={startSearch}>
         Search
       </button>
 
