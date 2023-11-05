@@ -1,8 +1,11 @@
 .detailCard {
-  @apply flex flex-col text-stone-100 border-stone-700 bg-stone-800 border-solid overflow-hidden mt-4 p-5;
-  width: 330px;
+  @apply flex flex-col text-stone-100 border-stone-700 bg-stone-800 border-solid overflow-hidden mt-4 ml-3 p-5;
+  min-height: 500px;
   height: fit-content;
+  min-width: 360px;
+  flex: 1 1 360px;
   border-width: 1px;
+  z-index: 20;
 
   .title1 {
     @apply text-3xl inline-block font-semibold text-center w-full;

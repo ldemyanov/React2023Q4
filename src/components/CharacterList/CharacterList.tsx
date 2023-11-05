@@ -1,39 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import commonClasses from '../../styles/common.module.scss';
 import classes from './stye.module.scss';
 import LeftSquareSvg from '../../assets/leftSquare.svg?react';
 import RightSquareSvg from '../../assets/rightSquare.svg?react';
 import { CharacterCard } from './CharacterCard';
-import { useSearchParams } from 'react-router-dom';
 import { NetworkError } from '../../errors';
 import { getCharacters } from '../../api/rickandmortyapi';
-import { Loader } from '../Loader';
 import { ICharacter } from '../../types';
+import { PaginationStepState } from '../SelectPagination/SelectPagination';
+import { Loader } from '..';
 
 type CharacterListProps = {
   searchString: string;
-  customStep: number;
+  pagination: PaginationStepState;
   changePage: (page: number) => void;
 };
 
-// const memoizedGetCharacters = () => {
-//   const cash = new Map<string, Promise<TCharactersResult>>();
-//   return (query: string, page: string) => {
-//     const cashName = query + '&' + page;
-
-//     if (cash.has(cashName)) {
-//       return cash.get(cashName) as Promise<TCharactersResult>;
-//     }
-
-//     const result = getCharacters(query, page);
-//     cash.set(cashName, result);
-//     return result;
-//   };
-// };
-
-// const getCharactersWithMemo = memoizedGetCharacters();
-
-function CharacterList({ searchString, changePage }: CharacterListProps) {
+function CharacterList(props: CharacterListProps) {
+  const { searchString, changePage, pagination } = props;
   const [characters, setCharacters] = useState<ICharacter[]>([]);
   const [message, setMessage] = useState<string>('');
   const [error, setError] = useState<boolean>(false);
@@ -41,14 +26,21 @@ function CharacterList({ searchString, changePage }: CharacterListProps) {
   const [count, setCount] = useState<number>(20);
   const [searchParams] = useSearchParams();
   const pageNum = Number(searchParams.get('page') ?? 1);
-  const stepPagination = 20; // Ограничение API
+  const pageStep = pagination.option?.value ?? 20;
 
   useEffect(() => {
-    const page = Number(searchParams.get('page') || 1);
+    if (pageNum !== 1) {
+      changePage(1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageStep]);
 
+  useEffect(() => {
     async function toSearch() {
       setLoading(true);
       try {
+        const check = pageStep === 10 && pageNum > 1;
+        const page = check ? Math.ceil(pageNum / 2) : pageNum;
         const res = await getCharacters(searchString, String(page));
 
         setCount(res.info.count);
@@ -68,20 +60,11 @@ function CharacterList({ searchString, changePage }: CharacterListProps) {
       setLoading(false);
     }
 
+    if (pageNum % 2 === 0 && pageStep == 10) return;
+
     toSearch();
-  }, [searchString, searchParams]);
-
-  const toLeft = () => {
-    if (pageNum > 1) {
-      changePage(pageNum - 1);
-    }
-  };
-
-  const toRight = () => {
-    if (pageNum <= count / stepPagination) {
-      changePage(pageNum + 1);
-    }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchString, pageNum]);
 
   if (isLoading) {
     <div className={commonClasses.loaderContainer}>
@@ -90,10 +73,15 @@ function CharacterList({ searchString, changePage }: CharacterListProps) {
   }
 
   if (!error && characters.length) {
+    let items = characters;
+    if (pageStep === 10) {
+      items = (pageNum * pageStep) % 20 !== 0 ? characters.slice(0, 10) : characters.slice(-10);
+    }
+
     return (
-      <div className="flex flex-col" style={{ width: '960px' }}>
+      <div className={classes.cardContainer}>
         <div className={classes.cardList}>
-          {characters.map((character, index) => (
+          {items.map((character, index) => (
             <CharacterCard key={index} character={character} />
           ))}
         </div>
@@ -101,18 +89,14 @@ function CharacterList({ searchString, changePage }: CharacterListProps) {
         <div className="flex justify-center text-slate-100 my-5">
           <button
             className={pageNum > 1 ? 'mx-2 fill-stone-500' : 'mx-2 invisible'}
-            onClick={toLeft}
+            onClick={() => changePage(pageNum - 1)}
           >
             <LeftSquareSvg />
           </button>
           <span className="mx-2 text-stone-200">{pageNum}</span>
           <button
-            className={
-              pageNum <= count / stepPagination
-                ? 'mx-2 fill-stone-500'
-                : 'mx-2 invisible'
-            }
-            onClick={toRight}
+            className={pageNum <= count / pageStep ? 'mx-2 fill-stone-500' : 'mx-2 invisible'}
+            onClick={() => changePage(pageNum + 1)}
           >
             <RightSquareSvg />
           </button>

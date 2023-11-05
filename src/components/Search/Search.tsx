@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import classes from './style.module.scss';
 import SearchSVG from '../../assets/search.svg?react';
+import SelectPagination, { PaginationStepState } from '../SelectPagination/SelectPagination';
 
 type SearchProps = {
   searchQuery: string;
   setSearchQuery: (words: string) => void;
   changePage: (page: number) => void;
-  setStep: (step: number) => void;
+  setPagination: React.Dispatch<React.SetStateAction<PaginationStepState>>;
 };
 
 function Search(props: SearchProps) {
@@ -25,13 +26,13 @@ function Search(props: SearchProps) {
     props.setSearchQuery('Secret Error');
   };
 
+  if (props.searchQuery === 'Secret Error') {
+    throw Error('Click on error button');
+  }
+
   return (
     <div className={classes.searchBlock}>
-      <input
-        type="number"
-        onChange={(event) => props.setStep(Number(event.target.value))}
-        placeholder="Count cards"
-      />
+      <SelectPagination setOption={props.setPagination} />
 
       <span className={classes.inputBox}>
         <SearchSVG />

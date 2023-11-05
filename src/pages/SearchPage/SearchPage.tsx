@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { Search, CharacterList } from '../../components';
+import { Search, CharacterList, Blocker } from '../../components';
 import commonClasses from '../../styles/common.module.scss';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Outlet } from 'react-router-dom';
+import { PaginationStepState, options } from '../../components/SelectPagination/SelectPagination';
 
 function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [customStep, setCustomStep] = useState<number>(20);
+  const [pagination, setPagination] = useState<PaginationStepState>({
+    option: options[0],
+  });
   const [searchString, setSearchString] = useState<string>(
     localStorage.getItem('searchQuery') ?? ''
   );
@@ -22,20 +25,24 @@ function SearchPage() {
 
   return (
     <>
-      <header className={commonClasses.header}>
-        <Search
-          setSearchQuery={setSearchQuery}
-          searchQuery={searchString}
-          changePage={changePage}
-          setStep={setCustomStep}
-        />
-      </header>
-      <div className="flex">
-        <CharacterList
-          searchString={searchString}
-          changePage={changePage}
-          customStep={customStep}
-        />
+      <Blocker />
+      <div className={commonClasses.container}>
+        <header className={commonClasses.header}>
+          <Search
+            setSearchQuery={setSearchQuery}
+            searchQuery={searchString}
+            changePage={changePage}
+            setPagination={setPagination}
+          />
+        </header>
+        <div className="flex w-fit">
+          <CharacterList
+            searchString={searchString}
+            changePage={changePage}
+            pagination={pagination}
+          />
+          <Outlet />
+        </div>
       </div>
     </>
   );

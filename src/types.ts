@@ -49,10 +49,9 @@ export type TCharactersResult = {
   results: ICharacter[];
 };
 
-export type FgetCharacters = (
-  query: string,
-  pageNumber: string
-) => Promise<TCharactersResult>;
+export type FgetCharacters = (query: string, pageNumber: string) => Promise<TCharactersResult>;
+
+export type FgetCharacter = (id: number | string) => Promise<ICharacter>;
 
 export type FgetEpisodes = (qs: string[]) => Promise<Array<IEpisode>>;
 
