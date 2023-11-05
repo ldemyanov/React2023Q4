@@ -18,27 +18,53 @@ function DetailCard() {
     async function fetchData(id: string) {
       setLoading(true);
 
-      const character = await getCharacter(Number(id));
-      const links =
-        character.episode.length > 10
-          ? (setMoreEpisodes(true), character.episode.slice(0, 10))
-          : character.episode;
+      try {
+        const character = await getCharacter(Number(id));
+        const links =
+          character.episode.length > 10
+            ? (setMoreEpisodes(true), character.episode.slice(0, 10))
+            : character.episode;
 
-      const res = await getEpisodes(links);
-
-      setCharacter(character);
-      setEpisodes(res);
-      setLoading(false);
+        const res = await getEpisodes(links);
+        setCharacter(character);
+        setEpisodes(res);
+      } finally {
+        setLoading(false);
+      }
     }
 
-    if (chId) fetchData(chId);
+    if (chId) {
+      const isNumber = /^\d+$/.test(chId);
+      if (isNumber) {
+        fetchData(chId);
+      }
+    }
   }, [chId]);
 
-  if (isLoading || !character) {
+  if (isLoading) {
     return (
       <div className={classes.detailCard}>
         <div className="flex justify-center content-center mt-auto mb-auto">
           <Loader />
+        </div>
+      </div>
+    );
+  }
+
+  if (!character) {
+    return (
+      <div className={classes.detailCard}>
+        <div className="flex justify-center content-center mt-auto mb-auto text-stone-300">
+          <div>
+            <h2 className={classes.title1}>This character not found</h2>
+            <p className="text-center py-3 px-2">
+              You are seeing this message because something went wrong, for example, you entered the
+              wrong parameters into url.
+            </p>
+            <Link className="text-center w-full block underline" to="/">
+              Continue search
+            </Link>
+          </div>
         </div>
       </div>
     );
