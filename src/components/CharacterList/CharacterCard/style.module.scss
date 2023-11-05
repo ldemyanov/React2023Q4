@@ -1,0 +1,24 @@
+.card {
+  @apply relative flex flex-col bg-stone-800 overflow-hidden;
+  width: 200px;
+  height: 200px;
+
+  .name {
+    @apply absolute bottom-0 inline-block text-xl text-stone-100 font-semibold text-center w-full;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .image {
+    @apply rounded-sm max-w-full h-auto;
+  }
+}
+
+.card:hover {
+  @apply rounded-md;
+  cursor: pointer;
+  transform: scale(1.12);
+
+  .name {
+    visibility: hidden;
+  }
+}

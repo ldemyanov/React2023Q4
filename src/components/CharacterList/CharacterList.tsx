@@ -1,0 +1,115 @@
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import commonClasses from '../../styles/common.module.scss';
+import classes from './stye.module.scss';
+import LeftSquareSvg from '../../assets/leftSquare.svg?react';
+import RightSquareSvg from '../../assets/rightSquare.svg?react';
+import { CharacterCard } from './CharacterCard';
+import { NetworkError } from '../../errors';
+import { getCharacters } from '../../api/rickandmortyapi';
+import { ICharacter } from '../../types';
+import { PaginationStepState } from '../SelectPagination/SelectPagination';
+import { Loader } from '..';
+
+type CharacterListProps = {
+  searchString: string;
+  pagination: PaginationStepState;
+  changePage: (page: number) => void;
+};
+
+function CharacterList(props: CharacterListProps) {
+  const { searchString, changePage, pagination } = props;
+  const [characters, setCharacters] = useState<ICharacter[]>([]);
+  const [message, setMessage] = useState<string>('');
+  const [error, setError] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [count, setCount] = useState<number>(20);
+  const [searchParams] = useSearchParams();
+  const pageNum = Number(searchParams.get('page') ?? 1);
+  const pageStep = pagination.option?.value ?? 20;
+
+  useEffect(() => {
+    if (pageNum !== 1) {
+      changePage(1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageStep]);
+
+  useEffect(() => {
+    async function toSearch() {
+      setLoading(true);
+      try {
+        const check = pageStep === 10 && pageNum > 1;
+        const page = check ? Math.ceil(pageNum / 2) : pageNum;
+        const res = await getCharacters(searchString, String(page));
+
+        setCount(res.info.count);
+        setCharacters(res.results);
+        setError(false);
+      } catch (error: unknown) {
+        let message = 'Unknown Error';
+        if (error instanceof NetworkError) {
+          message = error.status === 404 ? 'Not found' : error.message;
+        }
+
+        setCount(0);
+        setCharacters([]);
+        setError(true);
+        setMessage(message);
+      }
+      setLoading(false);
+    }
+
+    if (pageNum % 2 === 0 && pageStep == 10) return;
+
+    toSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchString, pageNum]);
+
+  if (isLoading) {
+    <div className={commonClasses.loaderContainer}>
+      <Loader />
+    </div>;
+  }
+
+  if (!error && characters.length) {
+    let items = characters;
+    if (pageStep === 10) {
+      items = (pageNum * pageStep) % 20 !== 0 ? characters.slice(0, 10) : characters.slice(-10);
+    }
+
+    return (
+      <div className={classes.cardContainer}>
+        <div className={classes.cardList}>
+          {items.map((character, index) => (
+            <CharacterCard key={index} character={character} />
+          ))}
+        </div>
+
+        <div className="flex justify-center text-slate-100 my-5">
+          <button
+            className={pageNum > 1 ? 'mx-2 fill-stone-500' : 'mx-2 invisible'}
+            onClick={() => changePage(pageNum - 1)}
+          >
+            <LeftSquareSvg />
+          </button>
+          <span className="mx-2 text-stone-200">{pageNum}</span>
+          <button
+            className={pageNum <= count / pageStep ? 'mx-2 fill-stone-500' : 'mx-2 invisible'}
+            onClick={() => changePage(pageNum + 1)}
+          >
+            <RightSquareSvg />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={classes.cardList}>
+      <p className={classes.message}>{message}</p>
+    </div>
+  );
+}
+
+export default CharacterList;
