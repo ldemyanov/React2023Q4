@@ -23,6 +23,11 @@ const SearchPage: React.FC = () => {
     setSearchParams(searchParams);
   };
 
+  const updatePagination = (paginationParam: React.SetStateAction<PaginationStepState>) => {
+    changePage(1);
+    setPagination(paginationParam);
+  };
+
   return (
     <>
       <Blocker />
@@ -32,7 +37,7 @@ const SearchPage: React.FC = () => {
             setSearchQuery={setSearchQuery}
             searchQuery={searchString}
             changePage={changePage}
-            setPagination={setPagination}
+            updatePagination={updatePagination}
           />
         </header>
         <div className="flex w-fit">

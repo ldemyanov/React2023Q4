@@ -7,14 +7,14 @@ type SearchProps = {
   searchQuery: string;
   setSearchQuery: (words: string) => void;
   changePage: (page: number) => void;
-  setPagination: React.Dispatch<React.SetStateAction<PaginationStepState>>;
+  updatePagination: (paginationParam: React.SetStateAction<PaginationStepState>) => void;
 };
 
 const Search: React.FC<SearchProps> = ({
   searchQuery,
   setSearchQuery,
   changePage,
-  setPagination,
+  updatePagination,
 }) => {
   const [searchString, setSearchString] = useState<string>(searchQuery);
 
@@ -37,7 +37,7 @@ const Search: React.FC<SearchProps> = ({
 
   return (
     <div className={classes.searchBlock}>
-      <SelectPagination setOption={setPagination} />
+      <SelectPagination setOption={updatePagination} />
 
       <span className={classes.inputBox}>
         <SearchSVG />

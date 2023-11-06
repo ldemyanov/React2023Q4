@@ -30,13 +30,6 @@ const CharacterList: React.FC<CharacterListProps> = (props) => {
   const pageStep = pagination.option?.value ?? 20;
 
   useEffect(() => {
-    if (pageNum !== 1) {
-      changePage(1);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageStep]);
-
-  useEffect(() => {
     async function toSearch() {
       setLoading(true);
       try {
@@ -68,9 +61,11 @@ const CharacterList: React.FC<CharacterListProps> = (props) => {
   }, [searchString, pageNum]);
 
   if (isLoading) {
-    <div className={commonClasses.loaderContainer}>
-      <Loader />
-    </div>;
+    return (
+      <div className={commonClasses.loaderContainer}>
+        <Loader />
+      </div>
+    );
   }
 
   if (!error && characters.length) {
