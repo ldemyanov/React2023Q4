@@ -7,9 +7,11 @@ const Blocker: React.FC = () => {
   const { characterId } = useParams();
 
   return (
-    <div className={characterId ? classes.blocker : classes.noblocker}>
-      <Link className={classes.blockerLink} to={`/?${searchParams.toString()}`} />
-    </div>
+    characterId && (
+      <div className={classes.blocker}>
+        <Link className={classes.blockerLink} to={`/?${searchParams.toString()}`} />
+      </div>
+    )
   );
 };
 
