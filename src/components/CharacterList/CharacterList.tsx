@@ -5,11 +5,11 @@ import classes from './stye.module.scss';
 import LeftSquareSvg from '../../assets/leftSquare.svg?react';
 import RightSquareSvg from '../../assets/rightSquare.svg?react';
 import { CharacterCard } from './CharacterCard';
-import { NetworkError } from '../../errors';
 import { getCharacters } from '../../api/rickAndMortyAPI';
 import { ICharacter } from '../../types';
 import { PaginationStepState } from '../SelectPagination/SelectPagination';
 import { Loader } from '..';
+import axios from 'axios';
 
 type CharacterListProps = {
   searchString: string;
@@ -24,7 +24,7 @@ const CharacterList: React.FC<CharacterListProps> = (props) => {
   const [message, setMessage] = useState<string>('');
   const [error, setError] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [count, setCount] = useState<number>(20);
+  const [count, setCount] = useState<number>(0);
   const [searchParams] = useSearchParams();
   const pageNum = Number(searchParams.get('page') ?? 1);
   const pageStep = pagination.option?.value ?? 20;
@@ -42,21 +42,21 @@ const CharacterList: React.FC<CharacterListProps> = (props) => {
       try {
         const check = pageStep === 10 && pageNum > 1;
         const page = check ? Math.ceil(pageNum / 2) : pageNum;
-        const res = await getCharacters(searchString, String(page));
-
-        setCount(res.info.count);
-        setCharacters(res.results);
+        const { data } = await getCharacters(searchString, String(page));
+        setCount(data.info.count);
+        setCharacters(data.results);
         setError(false);
-      } catch (error: unknown) {
-        let message = 'Unknown Error';
-        if (error instanceof NetworkError) {
-          message = error.status === 404 ? 'Not found' : error.message;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          setMessage(
+            error.response?.status === 404
+              ? 'Not Found'
+              : `Error with code ${error.response?.status}`
+          );
+        } else {
+          setMessage('Unknown error');
         }
-
-        setCount(0);
-        setCharacters([]);
         setError(true);
-        setMessage(message);
       }
       setLoading(false);
     }

@@ -18,19 +18,18 @@ const DetailCard: React.FC = () => {
     async function fetchData(id: string) {
       setLoading(true);
 
-      try {
-        const character = await getCharacter(Number(id));
-        const links =
-          character.episode.length > 10
-            ? (setMoreEpisodes(true), character.episode.slice(0, 10))
-            : character.episode;
+      const { data: resCharacter } = await getCharacter(Number(id));
+      const links =
+        resCharacter.episode.length > 10
+          ? (setMoreEpisodes(true), resCharacter.episode.slice(0, 10))
+          : resCharacter.episode;
 
-        const res = await getEpisodes(links);
-        setCharacter(character);
-        setEpisodes(res);
-      } finally {
-        setLoading(false);
-      }
+      const responses = await getEpisodes(links);
+      const episodes = responses.map((r) => r.data);
+
+      setCharacter(resCharacter);
+      setEpisodes(episodes);
+      setLoading(false);
     }
 
     if (chId) {

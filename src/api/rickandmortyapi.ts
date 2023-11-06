@@ -1,41 +1,31 @@
-import { NetworkError } from '../errors';
-import { FgetCharacters, FgetEpisodes, IEpisode, FgetCharacter } from '../types';
+import axios from 'axios';
+import { IEpisode, ICharacter, TCharactersResult } from '../types';
 
-const apiUrl = 'https://rickandmortyapi.com/api';
+const rickAndMortyAxios = axios.create({
+  baseURL: 'https://rickandmortyapi.com/api',
+  method: 'GET',
+});
 
-export const getCharacters: FgetCharacters = async (query, page) => {
-  let urlQuery = `${apiUrl}/character/?name=${query}`;
-  if (page) urlQuery += `&page=${page}`;
-
-  const response = await fetch(urlQuery);
-
-  if (!response.ok)
-    throw new NetworkError(`Request failed with status ${response.status}`, response.status);
-
-  return await response.json();
-};
-
-export const getCharacter: FgetCharacter = async (id) => {
-  const response = await fetch(`${apiUrl}/character/${id}`);
-
-  if (!response.ok)
-    throw new NetworkError(`Request failed with status ${response.status}`, response.status);
-
-  return await response.json();
-};
-
-export const getEpisodes: FgetEpisodes = async (queries) => {
-  const responses = await Promise.all(queries.map((q) => fetch(q)));
-  const episodes: Array<Promise<IEpisode>> = [];
-
-  responses.forEach(async (response) => {
-    if (response.ok) {
-      episodes.push(response.json());
-      return;
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (axios.isAxiosError(error)) {
+      console.error(error.response?.data.error || error.message);
+      return error.response;
+    } else if (error instanceof Error) {
+      console.error('Error: ', error.message);
     }
+  }
+);
 
-    throw new NetworkError(`Request failed with status ${response.status}`, response.status);
+export const getCharacters = (name: string, page: string) =>
+  rickAndMortyAxios<TCharactersResult>({
+    url: '/character',
+    params: { name, page },
   });
 
-  return Promise.all(episodes);
-};
+export const getCharacter = (id: number) =>
+  rickAndMortyAxios<ICharacter>({ url: `/character/${id}` });
+
+export const getEpisodes = async (queries: string[]) =>
+  axios.all(queries.map((q) => rickAndMortyAxios.get<IEpisode>(q)));
