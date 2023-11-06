@@ -57,53 +57,53 @@ const CharacterList: React.FC<CharacterListProps> = (props) => {
     if (pageNum % 2 === 0 && pageStep == 10) return;
 
     toSearch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchString, pageNum]);
+  }, [searchString, pageNum, pageStep]);
 
-  if (isLoading) {
-    return (
-      <div className={commonClasses.loaderContainer}>
-        <Loader />
-      </div>
-    );
-  }
-
-  if (!error && characters.length) {
-    let items = characters;
+  let items = characters;
+  if (items) {
     if (pageStep === 10) {
       items = (pageNum * pageStep) % 20 !== 0 ? characters.slice(0, 10) : characters.slice(-10);
     }
-
-    return (
-      <div className={classes.cardContainer}>
-        <div className={classes.cardList}>
-          {items.map((character, index) => (
-            <CharacterCard key={index} character={character} />
-          ))}
-        </div>
-
-        <div className="flex justify-center text-slate-100 my-5">
-          <button
-            className={pageNum > 1 ? 'mx-2 fill-stone-500' : 'mx-2 invisible'}
-            onClick={() => changePage(pageNum - 1)}
-          >
-            <LeftSquareSvg />
-          </button>
-          <span className="mx-2 text-stone-200">{pageNum}</span>
-          <button
-            className={pageNum <= count / pageStep ? 'mx-2 fill-stone-500' : 'mx-2 invisible'}
-            onClick={() => changePage(pageNum + 1)}
-          >
-            <RightSquareSvg />
-          </button>
-        </div>
-      </div>
-    );
   }
 
   return (
-    <div className={classes.cardList}>
-      <p className={classes.message}>{message}</p>
+    <div className={classes.cardContainer}>
+      {isLoading && (
+        <div className={commonClasses.loaderContainer}>
+          <Loader />
+        </div>
+      )}
+
+      {!isLoading && !error && characters.length && (
+        <>
+          <div className={classes.cardList}>
+            {items.map((character, index) => (
+              <CharacterCard key={index} character={character} />
+            ))}
+          </div>
+          <div className="flex justify-center text-slate-100 my-5">
+            <button
+              className={pageNum > 1 ? 'mx-2 fill-stone-500' : 'mx-2 invisible'}
+              onClick={() => changePage(pageNum - 1)}
+            >
+              <LeftSquareSvg />
+            </button>
+            <span className="mx-2 text-stone-200">{pageNum}</span>
+            <button
+              className={pageNum <= count / pageStep ? 'mx-2 fill-stone-500' : 'mx-2 invisible'}
+              onClick={() => changePage(pageNum + 1)}
+            >
+              <RightSquareSvg />
+            </button>
+          </div>
+        </>
+      )}
+
+      {error && (
+        <div className={classes.cardList}>
+          <p className={classes.message}>{message}</p>
+        </div>
+      )}
     </div>
   );
 };
