@@ -26,8 +26,8 @@ const CharacterList: React.FC<CharacterListProps> = (props) => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [count, setCount] = useState<number>(0);
   const [searchParams] = useSearchParams();
-  const pageNum = Number(searchParams.get('page') ?? 1);
-  const pageStep = pagination.option?.value ?? 20;
+  const pageNum = Number(searchParams.get('page') || 1);
+  const pageStep = pagination.option?.value || 20;
 
   useEffect(() => {
     async function toSearch() {

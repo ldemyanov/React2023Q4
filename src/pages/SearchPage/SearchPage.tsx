@@ -10,7 +10,7 @@ const SearchPage: React.FC = () => {
     option: options[0],
   });
   const [searchString, setSearchString] = useState<string>(
-    localStorage.getItem('searchQuery') ?? ''
+    localStorage.getItem('searchQuery') || ''
   );
 
   const setSearchQuery = (str: string) => {
