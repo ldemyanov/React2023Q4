@@ -19,7 +19,7 @@ type SelectPaginationProps = {
   setOption: React.Dispatch<React.SetStateAction<PaginationStepState>>;
 };
 
-function SelectPagination({ setOption }: SelectPaginationProps) {
+const SelectPagination: React.FC<SelectPaginationProps> = ({ setOption }) => {
   return (
     <div className="h-10">
       <Select
@@ -65,6 +65,6 @@ function SelectPagination({ setOption }: SelectPaginationProps) {
       />
     </div>
   );
-}
+};
 
 export default SelectPagination;

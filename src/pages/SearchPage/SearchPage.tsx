@@ -4,7 +4,7 @@ import commonClasses from '../../styles/common.module.scss';
 import { useSearchParams, Outlet } from 'react-router-dom';
 import { PaginationStepState, options } from '../../components/SelectPagination/SelectPagination';
 
-function SearchPage() {
+const SearchPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [pagination, setPagination] = useState<PaginationStepState>({
     option: options[0],
@@ -46,6 +46,6 @@ function SearchPage() {
       </div>
     </>
   );
-}
+};
 
 export default SearchPage;

@@ -10,12 +10,17 @@ type SearchProps = {
   setPagination: React.Dispatch<React.SetStateAction<PaginationStepState>>;
 };
 
-function Search(props: SearchProps) {
-  const [searchString, setSearchString] = useState<string>(props.searchQuery);
+const Search: React.FC<SearchProps> = ({
+  searchQuery,
+  setSearchQuery,
+  changePage,
+  setPagination,
+}) => {
+  const [searchString, setSearchString] = useState<string>(searchQuery);
 
   const startSearch = () => {
-    props.setSearchQuery(searchString.trim());
-    props.changePage(1);
+    setSearchQuery(searchString.trim());
+    changePage(1);
   };
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -23,16 +28,16 @@ function Search(props: SearchProps) {
   };
 
   const getError = () => {
-    props.setSearchQuery('Secret Error');
+    setSearchQuery('Secret Error');
   };
 
-  if (props.searchQuery === 'Secret Error') {
+  if (searchQuery === 'Secret Error') {
     throw Error('Click on error button');
   }
 
   return (
     <div className={classes.searchBlock}>
-      <SelectPagination setOption={props.setPagination} />
+      <SelectPagination setOption={setPagination} />
 
       <span className={classes.inputBox}>
         <SearchSVG />
@@ -54,6 +59,6 @@ function Search(props: SearchProps) {
       </button>
     </div>
   );
-}
+};
 
 export default Search;

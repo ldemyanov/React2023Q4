@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { SearchPage } from './pages';
 import { DetailCard } from './components';
 
-function App() {
+const App: React.FC = () => {
   return (
     <>
       <Routes>
@@ -14,6 +14,6 @@ function App() {
       </Routes>
     </>
   );
-}
+};
 
 export default App;

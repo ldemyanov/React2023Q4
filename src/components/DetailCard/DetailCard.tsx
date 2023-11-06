@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { ICharacter, IEpisode } from '../../types';
-import classes from './style.module.scss';
-import { getCharacter, getEpisodes } from '../../api/rickandmortyapi';
+import { getCharacter, getEpisodes } from '../../api/rickAndMortyAPI';
 import { Loader } from '../Loader';
 import CloseSVG from '../../assets/close.svg?react';
+import classes from './style.module.scss';
 
-function DetailCard() {
+const DetailCard: React.FC = () => {
   const { chId } = useParams();
   const [searchParams] = useSearchParams();
   const [episodes, setEpisodes] = useState<IEpisode[]>([]);
@@ -113,6 +113,6 @@ function DetailCard() {
       {isMoreEpisodes && <p>(And in other episodes)</p>}
     </div>
   );
-}
+};
 
 export default DetailCard;

@@ -6,7 +6,7 @@ import LeftSquareSvg from '../../assets/leftSquare.svg?react';
 import RightSquareSvg from '../../assets/rightSquare.svg?react';
 import { CharacterCard } from './CharacterCard';
 import { NetworkError } from '../../errors';
-import { getCharacters } from '../../api/rickandmortyapi';
+import { getCharacters } from '../../api/rickAndMortyAPI';
 import { ICharacter } from '../../types';
 import { PaginationStepState } from '../SelectPagination/SelectPagination';
 import { Loader } from '..';
@@ -17,8 +17,9 @@ type CharacterListProps = {
   changePage: (page: number) => void;
 };
 
-function CharacterList(props: CharacterListProps) {
+const CharacterList: React.FC<CharacterListProps> = (props) => {
   const { searchString, changePage, pagination } = props;
+
   const [characters, setCharacters] = useState<ICharacter[]>([]);
   const [message, setMessage] = useState<string>('');
   const [error, setError] = useState<boolean>(false);
@@ -110,6 +111,6 @@ function CharacterList(props: CharacterListProps) {
       <p className={classes.message}>{message}</p>
     </div>
   );
-}
+};
 
 export default CharacterList;
