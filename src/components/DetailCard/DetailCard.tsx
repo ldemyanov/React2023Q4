@@ -7,7 +7,7 @@ import CloseSVG from '../../assets/close.svg?react';
 import classes from './style.module.scss';
 
 const DetailCard: React.FC = () => {
-  const { chId } = useParams();
+  const { characterId } = useParams();
   const [searchParams] = useSearchParams();
   const [episodes, setEpisodes] = useState<IEpisode[]>([]);
   const [isMoreEpisodes, setMoreEpisodes] = useState<boolean>(false);
@@ -32,13 +32,13 @@ const DetailCard: React.FC = () => {
       setLoading(false);
     }
 
-    if (chId) {
-      const isNumber = /^\d+$/.test(chId);
+    if (characterId) {
+      const isNumber = /^\d+$/.test(characterId);
       if (isNumber) {
-        fetchData(chId);
+        fetchData(characterId);
       }
     }
-  }, [chId]);
+  }, [characterId]);
 
   if (isLoading) {
     return (

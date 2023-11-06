@@ -4,10 +4,10 @@ import classes from './style.module.scss';
 
 const Blocker: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const { chId } = useParams();
+  const { characterId } = useParams();
 
   return (
-    <div className={chId ? classes.blocker : classes.noblocker}>
+    <div className={characterId ? classes.blocker : classes.noblocker}>
       <Link className={classes.blockerLink} to={`/?${searchParams.toString()}`} />
     </div>
   );
