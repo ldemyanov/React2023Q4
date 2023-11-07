@@ -66,13 +66,8 @@ const CharacterList: React.FC<CharacterListProps> = ({ searchString, changePage,
   }, [searchString, pageNum]);
 
   let items = characters;
-  if (items) {
-    if (pageStepRef.current === 10) {
-      items =
-        (pageNum * pageStepRef.current) % 20 !== 0
-          ? characters.slice(0, 10)
-          : characters.slice(-10);
-    }
+  if (items && pageStepRef.current === 10) {
+    items = (pageNum * pageStepRef.current) % 20 !== 0 ? items.slice(0, 10) : items.slice(-10);
   }
 
   return isLoading ? (
