@@ -79,8 +79,8 @@ const CharacterList: React.FC<CharacterListProps> = ({ searchString, changePage,
       {!error && characters.length ? (
         <>
           <div className={classes.cardList}>
-            {items.map((character, index) => (
-              <CharacterCard key={index} character={character} />
+            {items.map((character) => (
+              <CharacterCard key={character.id} character={character} />
             ))}
           </div>
           <div className="flex justify-center text-slate-100 my-5">
