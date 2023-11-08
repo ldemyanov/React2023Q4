@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
+import axios from 'axios';
 import commonClasses from '../../styles/common.module.scss';
 import classes from './stye.module.scss';
 import { CharacterCard } from './CharacterCard';
 import { getCharacters } from '../../api/rickandmortyapi';
 import { TCharactersContext } from '../../types';
 import { Loader } from '..';
-import axios from 'axios';
 import { CharactersContext } from '../../pages/SearchPage/SearchPage';
-import Pagination from './Pagination/Pagination';
+import { Pagination } from './Pagination';
 
 const CharacterList: React.FC = () => {
   const { pagination, characters, updateCharacters, searchString, page } =

@@ -28,19 +28,19 @@ const SearchPage: React.FC = () => {
     localStorage.getItem('searchQuery') ?? ''
   );
 
-  const setSearchQuery = (str: string) => {
+  const updateSearchString = (str: string) => {
     setSearchString(str);
     localStorage.setItem('searchQuery', str);
   };
 
-  const changePage = (page: number) => {
+  const togglePage = (page: number) => {
     setPage(page);
     searchParams.set('page', String(page));
     setSearchParams(searchParams);
   };
 
-  const updatePagination = (paginationParam: React.SetStateAction<PaginationStepState>) => {
-    changePage(1);
+  const togglePagination = (paginationParam: React.SetStateAction<PaginationStepState>) => {
+    togglePage(1);
     setPagination(paginationParam);
   };
 
@@ -54,11 +54,11 @@ const SearchPage: React.FC = () => {
         characters,
         updateCharacters,
         searchString,
-        updateSearchString: setSearchQuery,
+        updateSearchString,
         pagination,
-        togglePagination: updatePagination,
+        togglePagination,
         page,
-        togglePage: changePage,
+        togglePage,
       }}
     >
       <Blocker />
