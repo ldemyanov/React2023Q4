@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { ICharacter, IEpisode } from '../../types';
-import { getCharacter, getEpisodes } from '../../api/rickAndMortyAPI';
+import { getCharacter, getEpisodes } from '../../api/rickandmortyapi';
 import { Loader } from '../Loader';
 import CloseSVG from '../../assets/close.svg?react';
 import classes from './style.module.scss';

@@ -1,23 +1,11 @@
 import React from 'react';
 import Select from 'react-select';
-
-export type PaginationStep = {
-  value: number;
-  label: string;
-};
-
-export interface PaginationStepState {
-  option: PaginationStep | null;
-}
+import { PaginationStep, SelectPaginationProps } from '../../types';
 
 export const options: PaginationStep[] = [
   { value: 20, label: '20 cards' },
   { value: 10, label: '10 cards' },
 ];
-
-type SelectPaginationProps = {
-  setOption: React.Dispatch<React.SetStateAction<PaginationStepState>>;
-};
 
 const SelectPagination: React.FC<SelectPaginationProps> = ({ setOption }) => {
   return (

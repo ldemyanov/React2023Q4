@@ -1,26 +1,21 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import classes from './style.module.scss';
 import SearchSVG from '../../assets/search.svg?react';
-import SelectPagination, { PaginationStepState } from '../SelectPagination/SelectPagination';
+import SelectPagination from '../SelectPagination/SelectPagination';
+import { CharactersContext } from '../../pages/SearchPage/SearchPage';
+import { TCharactersContext } from '../../types';
 
-type SearchProps = {
-  searchQuery: string;
-  setSearchQuery: (words: string) => void;
-  changePage: (page: number) => void;
-  updatePagination: (paginationParam: React.SetStateAction<PaginationStepState>) => void;
-};
+const Search: React.FC = () => {
+  const [liveString, setLiveString] = useState<string>('');
+  const context = useContext<TCharactersContext>(CharactersContext);
 
-const Search: React.FC<SearchProps> = ({
-  searchQuery,
-  setSearchQuery,
-  changePage,
-  updatePagination,
-}) => {
-  const [searchString, setSearchString] = useState<string>(searchQuery);
+  useEffect(() => {
+    setLiveString(context.searchString);
+  }, [context.searchString]);
 
   const startSearch = () => {
-    setSearchQuery(searchString.trim());
-    changePage(1);
+    context.updateSearchString(liveString.trim());
+    context.togglePage(1);
   };
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -28,25 +23,25 @@ const Search: React.FC<SearchProps> = ({
   };
 
   const getError = () => {
-    setSearchQuery('Secret Error');
+    context.updateSearchString('Secret Error');
   };
 
-  if (searchQuery === 'Secret Error') {
+  if (context.searchString === 'Secret Error') {
     throw Error('Click on error button');
   }
 
   return (
     <div className={classes.searchBlock}>
-      <SelectPagination setOption={updatePagination} />
+      <SelectPagination setOption={context.togglePagination} />
 
       <span className={classes.inputBox}>
         <SearchSVG />
         <input
           type="text"
-          onChange={(event) => setSearchString(event.target.value)}
+          onChange={(event) => setLiveString(event.target.value)}
           onKeyDown={keyDownHandler}
           placeholder="Please, input characters name"
-          value={searchString}
+          value={liveString}
         />
       </span>
 

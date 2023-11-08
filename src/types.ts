@@ -39,6 +39,20 @@ export interface IError {
   status: number;
 }
 
+export type TCharactersContext = {
+  characters: ICharacter[];
+  updateCharacters: (characters: ICharacter[]) => void;
+
+  searchString: string;
+  updateSearchString: (searchString: string) => void;
+
+  pagination: PaginationStepState;
+  togglePagination: (paginationParam: React.SetStateAction<PaginationStepState>) => void;
+
+  page: number;
+  togglePage: (page: number) => void;
+};
+
 export type TCharactersResult = {
   info: {
     count: number;
@@ -52,3 +66,16 @@ export type TCharactersResult = {
 export type FgetEpisodes = (qs: string[]) => Promise<Array<IEpisode>>;
 
 export type FgetMatch = (s: string) => string | null;
+
+export type PaginationStep = {
+  value: number;
+  label: string;
+};
+
+export interface PaginationStepState {
+  option: PaginationStep | null;
+}
+
+export type SelectPaginationProps = {
+  setOption: React.Dispatch<React.SetStateAction<PaginationStepState>>;
+};

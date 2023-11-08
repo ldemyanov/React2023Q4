@@ -2,24 +2,22 @@ import React, { useState, createContext } from 'react';
 import { Search, CharacterList, Blocker } from '../../components';
 import commonClasses from '../../styles/common.module.scss';
 import { useSearchParams, Outlet } from 'react-router-dom';
-import { PaginationStepState, options } from '../../components/SelectPagination/SelectPagination';
-import { ICharacter } from '../../types';
+import { options } from '../../components/SelectPagination/SelectPagination';
+import { ICharacter, TCharactersContext, PaginationStepState } from '../../types';
 
-type TCharactersContext = {
-  characters: ICharacter[];
-  updateCharacters: (characters: ICharacter[]) => void;
+export const CharactersContext = createContext<TCharactersContext>({
+  characters: [],
+  updateCharacters: () => {},
 
-  searchString: string;
-  updateSearchString: (searchString: string) => void;
+  searchString: '',
+  updateSearchString: () => {},
 
-  pagination: PaginationStepState;
-  togglePagination: (paginationParam: React.SetStateAction<PaginationStepState>) => void;
+  pagination: { option: options[0] },
+  togglePagination: () => {},
 
-  page: number;
-  togglePage: (page: number) => void;
-};
-
-const CharactersContext = createContext<TCharactersContext | null>(null);
+  page: 1,
+  togglePage: () => {},
+});
 
 const SearchPage: React.FC = () => {
   const [characters, setCharacters] = useState<ICharacter[]>([]);
@@ -66,19 +64,10 @@ const SearchPage: React.FC = () => {
       <Blocker />
       <div className={commonClasses.container}>
         <header className={commonClasses.header}>
-          <Search
-            setSearchQuery={setSearchQuery}
-            searchQuery={searchString}
-            changePage={changePage}
-            updatePagination={updatePagination}
-          />
+          <Search />
         </header>
         <div className="flex w-fit">
-          <CharacterList
-            searchString={searchString}
-            changePage={changePage}
-            pagination={pagination}
-          />
+          <CharacterList />
           <Outlet />
         </div>
       </div>
