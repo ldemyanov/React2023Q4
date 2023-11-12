@@ -11,28 +11,34 @@ import { ICharacter } from '../types';
 
 type DispatchCharactersCtx = Dispatch<SetStateAction<ICharacter[]>> | null;
 
-const CharactersCtx = createContext<ICharacter[]>([]);
+const CharactersCtx = createContext<{
+  characters: ICharacter[];
+  setCharacters: (r: ICharacter[]) => void;
+}>({
+  characters: [],
+  setCharacters: () => undefined,
+});
 
 const DispatchCharactersCtx = createContext<DispatchCharactersCtx>(null);
 
-export const CharactersProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [persons, setPersons] = useState<ICharacter[]>([]);
+export const CharactersProvider: FC<{ children: ReactNode; initCharacters?: ICharacter[] }> = ({
+  children,
+  initCharacters = [],
+}) => {
+  const [characters, setCharacters] = useState<ICharacter[]>(initCharacters);
+
+  const value = {
+    characters,
+    setCharacters,
+  };
 
   return (
-    <CharactersCtx.Provider value={persons}>
-      <DispatchCharactersCtx.Provider value={setPersons}>{children}</DispatchCharactersCtx.Provider>
+    <CharactersCtx.Provider value={value}>
+      <DispatchCharactersCtx.Provider value={setCharacters}>
+        {children}
+      </DispatchCharactersCtx.Provider>
     </CharactersCtx.Provider>
   );
 };
 
-export const usePersonsDispatch = () => {
-  const setCharacters = useContext(DispatchCharactersCtx);
-
-  if (!setCharacters) {
-    throw new Error('usePersonsDispatch has to be used within <PersonsDispatchContext.Provider>');
-  }
-
-  return setCharacters;
-};
-
-export const usePersonsCtx = () => useContext<ICharacter[]>(CharactersCtx);
+export const useCharachers = () => useContext(CharactersCtx);

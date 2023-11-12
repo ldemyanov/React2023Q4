@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import classes from './style.module.scss';
+import { useSearchCtx } from '../../context';
 // import SearchSVG from '../../assets/search.svg?react';
-import { useSearchContext } from '../../App';
 
 const Search: React.FC = () => {
   const [liveString, setLiveString] = useState<string>('');
-  const { searchString, updateSearchString } = useSearchContext();
+  const { searchString, updateSearchString } = useSearchCtx();
 
   useEffect(() => {
     setLiveString(searchString);

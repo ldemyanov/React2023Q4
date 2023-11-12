@@ -1,17 +1,18 @@
 import { useEffect, useState, useCallback } from 'react';
-import { usePersonsDispatch } from '../context/CharactersCtx';
 import { getCharacters } from '../api/rickandmortyapi';
 import axios from 'axios';
+import { ICharacter } from '../types';
 
 const emptyError = { isError: false, message: '' };
 
 export const useQueryCharacters = (searchString: string, page: number = 1) => {
-  const setCharacters = usePersonsDispatch();
   const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<{ isError: boolean; message: string }>(emptyError);
   const [count, setCount] = useState<number>(0);
+  const [characters, setCharacters] = useState<ICharacter[]>([]);
 
   const toSearch = useCallback(async () => {
+    setLoading(true);
     try {
       const check = page === 10 && page > 1;
       const { data } = await getCharacters(
@@ -31,14 +32,14 @@ export const useQueryCharacters = (searchString: string, page: number = 1) => {
       } else {
         setError({ isError: true, message: 'Unknown error' });
       }
+      setCharacters([]);
     }
+    setLoading(false);
   }, [page, searchString, setCharacters]);
 
   useEffect(() => {
-    setLoading(true);
     toSearch();
-    setLoading(false);
   }, [toSearch]);
 
-  return { isLoading, error, count };
+  return { isLoading, error, count, characters };
 };

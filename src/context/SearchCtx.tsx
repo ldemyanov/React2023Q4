@@ -1,10 +1,14 @@
 import { createContext, FC, useCallback, useContext, useState } from 'react';
 
-type TSearchCtx = string;
-type TDispatchSearchCtx = (newSearchString: string) => void;
+type TSearchContext = {
+  searchString: string;
+  updateSearchString: (newSearchString: string) => void;
+};
 
-const SearchCtx = createContext<TSearchCtx>('');
-const DispatchSearchCtx = createContext<TDispatchSearchCtx | null>(null);
+const SearchContext = createContext<TSearchContext>({
+  searchString: '',
+  updateSearchString: () => {},
+});
 
 type SearchCtxProviderProps = {
   children: React.ReactNode;
@@ -21,20 +25,10 @@ export const SearchCtxProvider: FC<SearchCtxProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <SearchCtx.Provider value={searchString}>
-      <DispatchSearchCtx.Provider value={updateSearchString}>{children}</DispatchSearchCtx.Provider>
-    </SearchCtx.Provider>
+    <SearchContext.Provider value={{ searchString, updateSearchString }}>
+      {children}
+    </SearchContext.Provider>
   );
 };
 
-export const useSearchDispatch = () => {
-  const setSearchString = useContext(DispatchSearchCtx);
-
-  if (!setSearchString) {
-    throw new Error('useSearchDispatch has to be used within <SearchSetStateContext.Provider>');
-  }
-
-  return setSearchString;
-};
-
-export const useSearchCtx = () => useContext<TSearchCtx>(SearchCtx);
+export const useSearchCtx = () => useContext<TSearchContext>(SearchContext);
