@@ -1,0 +1,19 @@
+.cardContainer {
+  flex: 1 1 auto;
+  max-width: 960px;
+  position: relative;
+}
+
+.cardList {
+  @apply flex gap-8 flex-wrap justify-evenly mt-4 px-8;
+  width: fit-content;
+  flex: 1 1 auto;
+}
+
+.message {
+  text-align: center;
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 25px;
+}
