@@ -18,6 +18,8 @@ axios.interceptors.response.use(
   }
 );
 
+// https://rickandmortyapi.com/api/character
+
 export const getCharacters = (name: string, page: string) =>
   rickAndMortyAxios<TCharactersResult>({
     url: '/character',

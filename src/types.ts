@@ -39,19 +39,19 @@ export interface IError {
   status: number;
 }
 
-export type TCharactersContext = {
-  characters: ICharacter[];
-  updateCharacters: (characters: ICharacter[]) => void;
+// export type TCharactersContext = {
+//   characters: ICharacter[];
+//   updateCharacters: (characters: ICharacter[]) => void;
 
-  searchString: string;
-  updateSearchString: (searchString: string) => void;
+//   searchString: string;
+//   updateSearchString: (searchString: string) => void;
 
-  pagination: PaginationStepState;
-  togglePagination: (paginationParam: React.SetStateAction<PaginationStepState>) => void;
+//   pagination: PaginationStepState;
+//   togglePagination: (paginationParam: React.SetStateAction<PaginationStepState>) => void;
 
-  page: number;
-  togglePage: (page: number) => void;
-};
+//   page: number;
+//   togglePage: (page: number) => void;
+// };
 
 export type TCharactersResult = {
   info: {
@@ -78,4 +78,14 @@ export interface PaginationStepState {
 
 export type SelectPaginationProps = {
   setOption: React.Dispatch<React.SetStateAction<PaginationStepState>>;
+};
+
+export type TSearchStringContext = {
+  searchString: string;
+  updateSearchString: (searchString: string) => void;
+};
+
+export type TCharactersContext = {
+  characters: ICharacter[];
+  updateCharacters: (characters: ICharacter[]) => void;
 };

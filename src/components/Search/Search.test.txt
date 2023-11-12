@@ -1,0 +1,8 @@
+import { render, screen } from '@testing-library/react';
+import Search from './Search';
+
+test('Render Search', () => {
+  render(<Search />);
+  const input = screen.getByPlaceholderText(/Please, input characters name/i);
+  expect(input).toBeInTheDocument();
+});

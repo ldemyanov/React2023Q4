@@ -3,7 +3,7 @@ import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { ICharacter, IEpisode } from '../../types';
 import { getCharacter, getEpisodes } from '../../api/rickandmortyapi';
 import { Loader } from '../Loader';
-import CloseSVG from '../../assets/close.svg?react';
+// import CloseSVG from '../../assets/close.svg?react';
 import classes from './style.module.scss';
 
 const DetailCard: React.FC = () => {
@@ -64,7 +64,7 @@ const DetailCard: React.FC = () => {
       ) : (
         <>
           <Link className="ml-auto" to={`/?${searchParams.toString()}`}>
-            <CloseSVG className="fill-stone-400" />
+            {/* <CloseSVG className="fill-stone-400" /> */} X
           </Link>
           <h1 className={classes.title1}>{character.name}</h1>
           <img

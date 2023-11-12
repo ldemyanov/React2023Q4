@@ -13,7 +13,7 @@ function ChararcterCard(props: ChararcterCardProps) {
 
   return (
     <Link to={`/${id}?${params.toString()}`}>
-      <div className={classes.card}>
+      <div data-testid="characterCard" className={classes.card}>
         <p>
           <span className={classes.name}>{name}</span>
         </p>

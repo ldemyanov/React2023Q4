@@ -1,55 +1,52 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useRef, useContext, useCallback } from 'react';
 import axios from 'axios';
 import commonClasses from '../../styles/common.module.scss';
 import classes from './stye.module.scss';
 import { CharacterCard } from './CharacterCard';
 import { getCharacters } from '../../api/rickandmortyapi';
-import { TCharactersContext } from '../../types';
 import { Loader } from '..';
-import { CharactersContext } from '../../pages/SearchPage/SearchPage';
 import { Pagination } from './Pagination';
+import { useCharactersContext, useSearchContext } from '../../App';
 
 const CharacterList: React.FC = () => {
-  const { pagination, characters, updateCharacters, searchString, page } =
-    useContext<TCharactersContext>(CharactersContext);
+  const { characters, updateCharacters } = useCharactersContext();
+  const { searchString } = useSearchContext();
+  const [pagination, setPagination] = useState<number>(20);
+  const { page, setPage } = useState<number>(1);
 
   const [message, setMessage] = useState<string>('');
   const [error, setError] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [count, setCount] = useState<number>(0);
-  const pageStepRef = useRef<number>(pagination.option?.value || 20);
 
-  useEffect(() => {
-    async function toSearch() {
-      try {
-        const check = pageStepRef.current === 10 && page > 1;
-        const { data } = await getCharacters(
-          searchString,
-          String(check ? Math.ceil(page / 2) : page)
-        );
+  // const toSearch = useCallback(async () => {
+  //   try {
+  //     const check = page === 10 && page > 1;
+  //     const { data } = await getCharacters(
+  //       searchString,
+  //       String(check ? Math.ceil(page / 2) : page)
+  //     );
+  //     setError(false);
+  //     setCount(data.info.count);
+  //     updateCharacters(data.results);
+  //   } catch (error) {
+  //     setError(true);
 
-        setError(false);
-        setCount(data.info.count);
-        updateCharacters(data.results);
-      } catch (error) {
-        setError(true);
+  //     if (axios.isAxiosError(error)) {
+  //       setMessage(
+  //         error.response?.status === 404 ? 'Not Found' : `Error with code ${error.response?.status}`
+  //       );
+  //     } else {
+  //       setMessage('Unknown error');
+  //     }
+  //   }
 
-        if (axios.isAxiosError(error)) {
-          setMessage(
-            error.response?.status === 404
-              ? 'Not Found'
-              : `Error with code ${error.response?.status}`
-          );
-        } else {
-          setMessage('Unknown error');
-        }
-      }
+  //   setLoading(false);
+  // }, [updateCharacters, page, searchString]);
 
-      setLoading(false);
-    }
-
-    toSearch();
-  }, [searchString, updateCharacters, page]);
+  // useEffect(() => {
+  //   toSearch();
+  // }, [toSearch]);
 
   let items = characters;
   if (items && pageStepRef.current === 10) {

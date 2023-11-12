@@ -1,21 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from './style.module.scss';
-import SearchSVG from '../../assets/search.svg?react';
-import SelectPagination from '../SelectPagination/SelectPagination';
-import { CharactersContext } from '../../pages/SearchPage/SearchPage';
-import { TCharactersContext } from '../../types';
+// import SearchSVG from '../../assets/search.svg?react';
+import { useSearchContext } from '../../App';
 
 const Search: React.FC = () => {
   const [liveString, setLiveString] = useState<string>('');
-  const context = useContext<TCharactersContext>(CharactersContext);
+  const { searchString, updateSearchString } = useSearchContext();
 
   useEffect(() => {
-    setLiveString(context.searchString);
-  }, [context.searchString]);
+    setLiveString(searchString);
+  }, [searchString]);
 
   const startSearch = () => {
-    context.updateSearchString(liveString.trim());
-    context.togglePage(1);
+    updateSearchString(liveString.trim());
   };
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -23,19 +20,17 @@ const Search: React.FC = () => {
   };
 
   const getError = () => {
-    context.updateSearchString('Secret Error');
+    updateSearchString('Secret Error');
   };
 
-  if (context.searchString === 'Secret Error') {
+  if (searchString === 'Secret Error') {
     throw Error('Click on error button');
   }
 
   return (
     <div className={classes.searchBlock}>
-      <SelectPagination setOption={context.togglePagination} />
-
       <span className={classes.inputBox}>
-        <SearchSVG />
+        {/* <SearchSVG /> */} s
         <input
           type="text"
           onChange={(event) => setLiveString(event.target.value)}
