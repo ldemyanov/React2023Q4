@@ -7,10 +7,10 @@ const SearchCtx = createContext<TSearchCtx>('');
 const DispatchSearchCtx = createContext<TDispatchSearchCtx | null>(null);
 
 type SearchCtxProviderProps = {
-  childrens: React.ReactNode;
+  children: React.ReactNode;
 };
 
-export const SearchCtxProvider: FC<SearchCtxProviderProps> = ({ childrens }) => {
+export const SearchCtxProvider: FC<SearchCtxProviderProps> = ({ children }) => {
   const [searchString, setSearchString] = useState<string>(
     localStorage.getItem('searchQuery') ?? ''
   );
@@ -22,9 +22,7 @@ export const SearchCtxProvider: FC<SearchCtxProviderProps> = ({ childrens }) => 
 
   return (
     <SearchCtx.Provider value={searchString}>
-      <DispatchSearchCtx.Provider value={updateSearchString}>
-        {childrens}
-      </DispatchSearchCtx.Provider>
+      <DispatchSearchCtx.Provider value={updateSearchString}>{children}</DispatchSearchCtx.Provider>
     </SearchCtx.Provider>
   );
 };

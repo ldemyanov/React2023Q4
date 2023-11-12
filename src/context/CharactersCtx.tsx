@@ -7,7 +7,7 @@ import {
   useContext,
   FC,
 } from 'react';
-import { ICharacter } from '../../types';
+import { ICharacter } from '../types';
 
 type DispatchCharactersCtx = Dispatch<SetStateAction<ICharacter[]>> | null;
 
@@ -25,7 +25,7 @@ export const CharactersProvider: FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
-export function usePersonsDispatch() {
+export const usePersonsDispatch = () => {
   const setCharacters = useContext(DispatchCharactersCtx);
 
   if (!setCharacters) {
@@ -33,6 +33,6 @@ export function usePersonsDispatch() {
   }
 
   return setCharacters;
-}
+};
 
 export const usePersonsCtx = () => useContext<ICharacter[]>(CharactersCtx);
