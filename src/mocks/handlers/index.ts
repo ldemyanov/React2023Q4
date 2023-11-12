@@ -2,11 +2,17 @@ import { http, HttpResponse } from 'msw';
 import characters from '../responses/characters.json';
 
 export const handlers = [
-  http.get('https://rickandmortyapi.com/api/character', () => {
-    return HttpResponse.json(characters);
-  }),
+  http.get<never>('https://rickandmortyapi.com/api/character', ({ request }) => {
+    const url = new URL(request.url);
+    const name = url.searchParams.get('name');
 
-  http.get('https://rickandmortyapi.com/api/character/?name=Notcharacter', () => {
+    if (name === 'noCharacters') {
+      return new HttpResponse(null, {
+        status: 404,
+        statusText: 'Not Found',
+      });
+    }
+
     return HttpResponse.json(characters);
   }),
 ];

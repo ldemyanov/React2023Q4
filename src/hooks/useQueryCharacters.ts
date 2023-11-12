@@ -1,27 +1,29 @@
 import { useEffect, useState, useCallback } from 'react';
 import { getCharacters } from '../api/rickandmortyapi';
 import axios from 'axios';
-import { ICharacter } from '../types';
+import { useCharachers } from '../context';
 
 const emptyError = { isError: false, message: '' };
 
-export const useQueryCharacters = (searchString: string, page: number = 1) => {
+export const useQueryCharacters = (
+  searchString: string,
+  perPageElements: number,
+  page: number = 1
+) => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<{ isError: boolean; message: string }>(emptyError);
   const [count, setCount] = useState<number>(0);
-  const [characters, setCharacters] = useState<ICharacter[]>([]);
+  const { updateCharacters, characters } = useCharachers();
 
   const toSearch = useCallback(async () => {
     setLoading(true);
     try {
-      const check = page === 10 && page > 1;
-      const { data } = await getCharacters(
-        searchString,
-        String(check ? Math.ceil(page / 2) : page)
-      );
+      const check = perPageElements === 10 && page > 1;
+      const queryPage = String(check ? Math.ceil(page / 2) : page);
+      const { data } = await getCharacters(searchString, queryPage);
       setError(emptyError);
       setCount(data.info.count);
-      setCharacters(data.results);
+      updateCharacters(data.results);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const message =
@@ -32,14 +34,19 @@ export const useQueryCharacters = (searchString: string, page: number = 1) => {
       } else {
         setError({ isError: true, message: 'Unknown error' });
       }
-      setCharacters([]);
+      updateCharacters([]);
     }
     setLoading(false);
-  }, [page, searchString, setCharacters]);
+  }, [page, searchString, updateCharacters, perPageElements]);
 
   useEffect(() => {
     toSearch();
   }, [toSearch]);
 
-  return { isLoading, error, count, characters };
+  let items = characters;
+  if (items && perPageElements === 10) {
+    items = (page * perPageElements) % 20 !== 0 ? items.slice(0, 10) : items.slice(-10);
+  }
+
+  return { isLoading, error, count, characters: items };
 };

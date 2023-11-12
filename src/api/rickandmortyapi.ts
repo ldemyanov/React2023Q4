@@ -20,11 +20,22 @@ axios.interceptors.response.use(
 
 // https://rickandmortyapi.com/api/character
 
-export const getCharacters = (name: string, page: string) =>
-  rickAndMortyAxios<TCharactersResult>({
+export const getCharacters = (name: string, page: string) => {
+  const params: { name?: string; page?: string } = {};
+
+  if (name) {
+    params.name = name;
+  }
+
+  if (page) {
+    params.page = page;
+  }
+
+  return rickAndMortyAxios<TCharactersResult>({
     url: '/character',
-    params: { name, page },
+    params,
   });
+};
 
 export const getCharacter = (id: number) =>
   rickAndMortyAxios<ICharacter>({ url: `/character/${id}` });

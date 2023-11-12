@@ -4,6 +4,6 @@ import { DetailCard } from './DetailCard';
 import { ErrorBoundary } from './ErrorBoundary';
 import { Loader } from './Loader';
 import { Search } from './Search';
-import { SelectPagination } from './SelectPagination';
+// import { SelectPagination } from './SelectPagination';
 
-export { CharacterList, Search, Loader, ErrorBoundary, SelectPagination, DetailCard, Blocker };
+export { CharacterList, Search, Loader, ErrorBoundary, DetailCard, Blocker };

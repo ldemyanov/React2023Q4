@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import classes from './style.module.scss';
 import { useSearchCtx } from '../../context';
+import SelectCountPerPape from '../SelectPagination/SelectCountPerPage';
 // import SearchSVG from '../../assets/search.svg?react';
 
 const Search: React.FC = () => {
@@ -29,8 +30,10 @@ const Search: React.FC = () => {
 
   return (
     <div className={classes.searchBlock}>
+      <SelectCountPerPape />
+
       <span className={classes.inputBox}>
-        {/* <SearchSVG /> */} s
+        {/* <SearchSVG /> */}
         <input
           type="text"
           onChange={(event) => setLiveString(event.target.value)}

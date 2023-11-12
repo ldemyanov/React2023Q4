@@ -1,20 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import commonClasses from '../../styles/common.module.scss';
 import classes from './stye.module.scss';
 import { CharacterCard } from './CharacterCard';
 import { Loader } from '..';
-// import { Pagination } from './Pagination';
+import { Pagination } from './Pagination';
 import { useQueryCharacters } from '../../hooks';
-import { useCharachers, useSearchCtx } from '../../context';
+import { useSearchCtx } from '../../context';
 
 const CharacterList: React.FC = () => {
-  const { searchString } = useSearchCtx();
-  const { isLoading, characters, error } = useQueryCharacters(searchString, 1);
-  const { setCharacters } = useCharachers();
-
-  useEffect(() => {
-    setCharacters(characters);
-  }, [characters, setCharacters]);
+  const { searchString, page, perPageElements } = useSearchCtx();
+  const { isLoading, error, characters, count } = useQueryCharacters(
+    searchString,
+    perPageElements,
+    page
+  );
 
   const CharacterListError: React.FC<{ message: string }> = ({ message }) => (
     <div className={classes.cardList}>
@@ -35,7 +34,7 @@ const CharacterList: React.FC = () => {
               <CharacterCard key={character.id} character={character} />
             ))}
           </div>
-          {/* <Pagination count={count} pageStep={pageStepRef.current} /> */}
+          <Pagination count={count} />
         </>
       ) : (
         <CharacterListError message={error.message} />

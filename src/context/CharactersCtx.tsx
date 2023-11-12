@@ -1,25 +1,15 @@
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  createContext,
-  useState,
-  useContext,
-  FC,
-} from 'react';
+import { ReactNode, createContext, useState, useContext, FC, useCallback } from 'react';
 import { ICharacter } from '../types';
 
-type DispatchCharactersCtx = Dispatch<SetStateAction<ICharacter[]>> | null;
-
-const CharactersCtx = createContext<{
+type TCharactersCtx = {
   characters: ICharacter[];
-  setCharacters: (r: ICharacter[]) => void;
-}>({
-  characters: [],
-  setCharacters: () => undefined,
-});
+  updateCharacters: (characters: ICharacter[]) => void;
+};
 
-const DispatchCharactersCtx = createContext<DispatchCharactersCtx>(null);
+const CharactersCtx = createContext<TCharactersCtx>({
+  characters: [],
+  updateCharacters: () => {},
+});
 
 export const CharactersProvider: FC<{ children: ReactNode; initCharacters?: ICharacter[] }> = ({
   children,
@@ -27,16 +17,13 @@ export const CharactersProvider: FC<{ children: ReactNode; initCharacters?: ICha
 }) => {
   const [characters, setCharacters] = useState<ICharacter[]>(initCharacters);
 
-  const value = {
-    characters,
-    setCharacters,
-  };
+  const updateCharacters = useCallback((newCharacters: ICharacter[]) => {
+    setCharacters(newCharacters);
+  }, []);
 
   return (
-    <CharactersCtx.Provider value={value}>
-      <DispatchCharactersCtx.Provider value={setCharacters}>
-        {children}
-      </DispatchCharactersCtx.Provider>
+    <CharactersCtx.Provider value={{ characters, updateCharacters }}>
+      {children}
     </CharactersCtx.Provider>
   );
 };

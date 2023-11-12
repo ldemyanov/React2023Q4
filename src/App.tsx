@@ -4,14 +4,11 @@ import { SearchPage } from './pages';
 import { DetailCard } from './components';
 import { SearchCtxProvider } from './context';
 import { CharactersProvider } from './context';
-import { useQueryCharacters } from './hooks';
 
 const App: React.FC = () => {
-  const { characters } = useQueryCharacters('', 1);
-
   return (
     <SearchCtxProvider>
-      <CharactersProvider initCharacters={characters}>
+      <CharactersProvider initCharacters={[]}>
         <Routes>
           <Route path="/React2023Q4" element={<SearchPage />} />
           <Route path="/" element={<SearchPage />}>
