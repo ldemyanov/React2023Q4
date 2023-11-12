@@ -35,6 +35,7 @@ const Search: React.FC = () => {
       <span className={classes.inputBox}>
         {/* <SearchSVG /> */}
         <input
+          name="searchString"
           type="text"
           onChange={(event) => setLiveString(event.target.value)}
           onKeyDown={keyDownHandler}
@@ -43,7 +44,7 @@ const Search: React.FC = () => {
         />
       </span>
 
-      <button className={classes.button} onClick={startSearch}>
+      <button data-testid="btnStartSearch" className={classes.button} onClick={startSearch}>
         Search
       </button>
 

@@ -1,8 +1,12 @@
 import React from 'react';
 import classes from './style.module.scss';
 
-const Loader: React.FC = () => (
-  <div className={classes.loader}>
+type LoaderProps = {
+  testId?: string;
+};
+
+const Loader: React.FC<LoaderProps> = ({ testId = 'Loader' }) => (
+  <div data-testid={testId} className={classes.loader}>
     <div></div>
     <div></div>
     <div></div>

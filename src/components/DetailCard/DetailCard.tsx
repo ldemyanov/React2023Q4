@@ -41,10 +41,10 @@ const DetailCard: React.FC = () => {
   }, [characterId]);
 
   return (
-    <div className={classes.detailCard}>
+    <div className={classes.detailCard} data-testid="detailCard">
       {isLoading ? (
         <div className="flex justify-center content-center mt-auto mb-auto">
-          <Loader />
+          <Loader testId="DetailCardLoader" />
         </div>
       ) : !character ? (
         <div className={classes.detailCard}>
@@ -63,7 +63,7 @@ const DetailCard: React.FC = () => {
         </div>
       ) : (
         <>
-          <Link className="ml-auto" to={`/?${searchParams.toString()}`}>
+          <Link data-testid="closeBtn" className="ml-auto" to={`/?${searchParams.toString()}`}>
             {/* <CloseSVG className="fill-stone-400" /> */} X
           </Link>
           <h1 className={classes.title1}>{character.name}</h1>
