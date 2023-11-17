@@ -1,12 +1,16 @@
 import React from 'react';
-import { useSearchCtx } from '../../context';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { setPerPageElements } from '../../store/reducers/searchSlice';
 
 const SelectCountPerPape: React.FC = () => {
-  const { perPageElements, setPerPageElemetns, setPage } = useSearchCtx();
+  const { perPageElements } = useAppSelector((s) => s.search);
+  const dispatch = useAppDispatch();
 
   const toogleSelectValue: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
-    setPerPageElemetns(Number(event.target.value));
-    setPage(1);
+    const perPageElements = Number(event.target.value);
+    if (perPageElements === 10 || perPageElements === 20) {
+      dispatch(setPerPageElements(perPageElements));
+    }
   };
 
   return (

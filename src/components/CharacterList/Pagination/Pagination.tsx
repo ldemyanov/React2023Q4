@@ -1,8 +1,7 @@
 import React from 'react';
-import { useSearchCtx } from '../../../context';
 import { useSearchParams } from 'react-router-dom';
-// import { ReactComponent as LeftSquareSvg } from '../../../assets/leftSquare.svg';
-// import { ReactComponent as RightSquareSvg } from '../../../assets/rightSquare.svg';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
+import { setPage } from '../../../store/reducers/searchSlice';
 // import LeftSquareSvg from '../../../assets/leftSquare.svg?react';
 // import RightSquareSvg from '../../../assets/rightSquare.svg?react';
 
@@ -11,11 +10,12 @@ type TPagination = {
 };
 
 const Pagination: React.FC<TPagination> = ({ count }) => {
-  const { page, setPage, perPageElements } = useSearchCtx();
+  const { page, perPageElements } = useAppSelector((state) => state.search);
+  const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const updatePage = (page: number) => {
-    setPage(page);
+    dispatch(setPage(page));
     searchParams.set('page', String(page));
     setSearchParams(searchParams);
   };

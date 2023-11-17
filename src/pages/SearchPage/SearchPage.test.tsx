@@ -3,13 +3,12 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import user from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { server } from '../../mocks/server';
-import App from '../../App';
+import App from '../../components/App/App';
+import * as Server from '../../api/rickandmortyapi';
 
 describe('Tests for the Detailed Card and Card components:', () => {
   beforeEach(async () => {
     server.listen();
-
-    jest.mock('../../api/rickandmortyapi');
 
     await act(async () =>
       render(
@@ -30,11 +29,14 @@ describe('Tests for the Detailed Card and Card components:', () => {
 
   describe('Detail Cards', () => {
     it('Validate that clicking on a card opens a detailed card component', async () => {
+      const mockGetCharacters = jest.spyOn(Server, 'getCharacter');
+
       const firstCard = await waitFor(() => {
         const cards = screen.getAllByTestId('characterCard');
         return cards[0];
       });
       await user.click(firstCard);
+      await expect(mockGetCharacters).toHaveBeenCalled();
       await waitFor(() => {
         screen.getByTestId('detailCard');
       });

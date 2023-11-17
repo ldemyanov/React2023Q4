@@ -1,30 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import classes from './style.module.scss';
-import { useSearchCtx } from '../../context';
 import SelectCountPerPape from '../SelectPagination/SelectCountPerPage';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { setSearchString } from '../../store/reducers/searchSlice';
 // import SearchSVG from '../../assets/search.svg?react';
+
+const secret = 'Secret Error 123';
 
 const Search: React.FC = () => {
   const [liveString, setLiveString] = useState<string>('');
-  const { searchString, updateSearchString } = useSearchCtx();
+  const { searchString } = useAppSelector((s) => s.search);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setLiveString(searchString);
   }, [searchString]);
 
-  const startSearch = () => {
-    updateSearchString(liveString.trim());
-  };
+  const startSearch = () => dispatch(setSearchString(liveString.trim()));
+  const getError = () => dispatch(setSearchString(secret));
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.code === 'Enter') startSearch();
   };
 
-  const getError = () => {
-    updateSearchString('Secret Error');
-  };
-
-  if (searchString === 'Secret Error') {
+  if (searchString === secret) {
     throw Error('Click on error button');
   }
 

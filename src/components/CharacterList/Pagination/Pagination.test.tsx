@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import App from '../../../App';
+import App from '../../App/App';
 import { server } from '../../../mocks/server';
 
 describe('Tests for the Detailed Card and Card components:', () => {

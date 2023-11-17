@@ -5,10 +5,11 @@ import { CharacterCard } from './CharacterCard';
 import { Loader } from '..';
 import { Pagination } from './Pagination';
 import { useQueryCharacters } from '../../hooks';
-import { useSearchCtx } from '../../context';
+import { useAppSelector } from '../../hooks/redux';
 
 const CharacterList: React.FC = () => {
-  const { searchString, page, perPageElements } = useSearchCtx();
+  const { searchString, page, perPageElements } = useAppSelector((state) => state.search);
+
   const { isLoading, error, characters, count } = useQueryCharacters(
     searchString,
     perPageElements,
