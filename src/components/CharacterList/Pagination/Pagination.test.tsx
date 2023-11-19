@@ -3,6 +3,8 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom';
 import App from '../../App/App';
 import { server } from '../../../mocks/server';
+import { Provider } from 'react-redux';
+import { setupStore } from '../../../store/store';
 
 describe('Tests for the Detailed Card and Card components:', () => {
   beforeEach(async () => {
@@ -10,9 +12,11 @@ describe('Tests for the Detailed Card and Card components:', () => {
 
     await act(async () =>
       render(
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <Provider store={setupStore()}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </Provider>
       )
     );
   });

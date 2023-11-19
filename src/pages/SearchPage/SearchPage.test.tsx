@@ -1,10 +1,13 @@
 import '@testing-library/jest-dom';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import user from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { server } from '../../mocks/server';
 import App from '../../components/App/App';
-import * as Server from '../../api/rickandmortyapi';
+import * as API from '../../services/RickAndMortyService';
+import { Provider } from 'react-redux';
+import { setupStore } from '../../store/store';
+import { CharacterList } from '../../components';
 
 describe('Tests for the Detailed Card and Card components:', () => {
   beforeEach(async () => {
@@ -12,9 +15,11 @@ describe('Tests for the Detailed Card and Card components:', () => {
 
     await act(async () =>
       render(
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <Provider store={setupStore()}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </Provider>
       )
     );
   });
@@ -28,8 +33,8 @@ describe('Tests for the Detailed Card and Card components:', () => {
   });
 
   describe('Detail Cards', () => {
-    it('Validate that clicking on a card opens a detailed card component', async () => {
-      const mockGetCharacters = jest.spyOn(Server, 'getCharacter');
+    it('Validate that clicking on a card makes api call and opens a detailed card component', async () => {
+      const mockGetCharacters = jest.spyOn(API, 'useFetchCharacterQuery');
 
       const firstCard = await waitFor(() => {
         const cards = screen.getAllByTestId('characterCard');
@@ -75,21 +80,15 @@ describe('Tests for the Detailed Card and Card components:', () => {
 });
 
 describe('Check that a loading indicator is displayed while fetching data', () => {
-  beforeEach(async () => {
-    jest.mock('../../api/rickandmortyapi');
-
-    await act(async () =>
-      render(
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      )
+  it('Check that a loading indicator is displayed while fetching data', () => {
+    render(
+      <Provider store={setupStore()}>
+        <MemoryRouter>
+          <CharacterList />
+        </MemoryRouter>
+      </Provider>
     );
-  });
-
-  it('Check Loader', async () => {
-    await waitFor(() => {
-      screen.getByTestId('DetailCardLoader');
-    });
+    const message = screen.getByTestId('testLoader');
+    expect(message).toBeInTheDocument();
   });
 });

@@ -1,7 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import Search from './Search';
 import { BrowserRouter } from 'react-router-dom';
-import { SearchCtxProvider } from '../../context';
+import { Provider } from 'react-redux';
+import { setupStore } from '../../store/store';
 
 const mockGetItem = jest.fn();
 const mockSetItem = jest.fn();
@@ -17,11 +18,11 @@ Object.defineProperty(window, 'localStorage', {
 describe('Search', () => {
   it('Verify that clicking the Search button saves the entered value to the local storage', () => {
     render(
-      <BrowserRouter>
-        <SearchCtxProvider>
+      <Provider store={setupStore()}>
+        <BrowserRouter>
           <Search />
-        </SearchCtxProvider>
-      </BrowserRouter>
+        </BrowserRouter>
+      </Provider>
     );
 
     const input = document.querySelector('input[name="searchString"]');
@@ -42,11 +43,11 @@ describe('Search', () => {
 
   it('Check that the component retrieves the value from the local storage upon mounting', () => {
     render(
-      <BrowserRouter>
-        <SearchCtxProvider>
+      <Provider store={setupStore()}>
+        <BrowserRouter>
           <Search />
-        </SearchCtxProvider>
-      </BrowserRouter>
+        </BrowserRouter>
+      </Provider>
     );
 
     expect(mockGetItem).toHaveBeenCalled();

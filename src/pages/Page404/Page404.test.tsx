@@ -5,7 +5,7 @@ import Router from '../../Router';
 describe('Search', () => {
   it('Ensure that the 404 page is displayed when navigating to an invalid route.', () => {
     render(
-      <MemoryRouter initialEntries={['/users/mjackson']}>
+      <MemoryRouter initialEntries={['/undefined/undefined']}>
         <Router />
       </MemoryRouter>
     );
