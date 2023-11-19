@@ -4,17 +4,15 @@ import classes from './stye.module.scss';
 import { CharacterCard } from './CharacterCard';
 import { Loader } from '..';
 import { Pagination } from './Pagination';
-import { useQueryCharacters } from '../../hooks';
 import { useAppSelector } from '../../hooks/redux';
+import { useFetchCharactersQuery } from '../../services/RickAndMortyService';
 
 const CharacterList: React.FC = () => {
-  const { searchString, page, perPageElements } = useAppSelector((state) => state.search);
+  const { searchString: name, page, perPageElements } = useAppSelector((state) => state.search);
+  const { isLoading, isError, data } = useFetchCharactersQuery({ name, page, perPageElements });
 
-  const { isLoading, error, characters, count } = useQueryCharacters(
-    searchString,
-    perPageElements,
-    page
-  );
+  const characters = data?.results || [];
+  const count = data?.info.count || 0;
 
   const CharacterListError: React.FC<{ message: string }> = ({ message }) => (
     <div className={classes.cardList}>
@@ -23,12 +21,12 @@ const CharacterList: React.FC = () => {
   );
 
   return isLoading ? (
-    <div className={commonClasses.loaderContainer}>
+    <div className={commonClasses.loaderContainer} data-testid="testLoader">
       <Loader />
     </div>
   ) : (
     <div className={classes.cardContainer}>
-      {!error.isError && characters.length ? (
+      {!isError && characters.length ? (
         <>
           <div className={classes.cardList}>
             {characters.map((character) => (
@@ -38,7 +36,7 @@ const CharacterList: React.FC = () => {
           <Pagination count={count} />
         </>
       ) : (
-        <CharacterListError message={error.message} />
+        <CharacterListError message="Not Found" />
       )}
     </div>
   );

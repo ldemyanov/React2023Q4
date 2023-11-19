@@ -3,7 +3,6 @@ import classes from './style.module.scss';
 import SelectCountPerPape from '../SelectPagination/SelectCountPerPage';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setSearchString } from '../../store/reducers/searchSlice';
-// import SearchSVG from '../../assets/search.svg?react';
 
 const secret = 'Secret Error 123';
 
@@ -13,7 +12,13 @@ const Search: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    const previousString: string = localStorage.getItem('searchString') || '';
+    setLiveString(previousString);
+  }, []);
+
+  useEffect(() => {
     setLiveString(searchString);
+    localStorage.setItem('searchString', searchString);
   }, [searchString]);
 
   const startSearch = () => dispatch(setSearchString(liveString.trim()));
@@ -32,7 +37,6 @@ const Search: React.FC = () => {
       <SelectCountPerPape />
 
       <span className={classes.inputBox}>
-        {/* <SearchSVG /> */}
         <input
           name="searchString"
           type="text"
