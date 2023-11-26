@@ -1,0 +1,51 @@
+.detailCard {
+  @apply flex flex-col text-stone-100 border-stone-700 bg-stone-800 border-solid overflow-hidden mt-4 ml-3 p-5;
+  min-height: 500px;
+  height: fit-content;
+  min-width: 360px;
+  flex: 1 1 360px;
+  border-width: 1px;
+  z-index: 20;
+
+  .title1 {
+    @apply text-3xl inline-block font-semibold text-center w-full;
+  }
+
+  .title2 {
+    @apply text-xl inline-block font-semibold my-1 w-full;
+  }
+
+  .image {
+    @apply my-4 mx-auto rounded-lg max-w-full h-auto border-solid border-stone-300;
+    width: 270px;
+    height: 270px;
+  }
+
+  ul.propList {
+    @apply flex flex-col text-stone-300 text-lg;
+
+    li {
+      @apply flex border-b-2 pt-1 border-stone-600;
+
+      .propName {
+        @apply block mr-auto;
+      }
+
+      .propValue {
+        @apply block font-semibold text-right;
+      }
+    }
+  }
+
+  ul.episodeList {
+    @apply flex flex-col text-sm;
+  }
+
+  .episodeNum {
+    @apply text-rose-300;
+  }
+
+  .episodeName {
+    @apply font-medium;
+  }
+}
