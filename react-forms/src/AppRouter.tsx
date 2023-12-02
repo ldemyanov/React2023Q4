@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import RootPage from './pages/RootPage';
+import RootPage from './pages/rootPage/RootPage';
 import ControlledForm from './pages/ControlledForm';
-import UncontrolledForm from './pages/UncontrolledForm';
+import UncontrolledForm from './pages/uncontrolledForm/UncontrolledForm';
 
 export enum AppPath {
   Root = '/',
