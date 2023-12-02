@@ -85,7 +85,7 @@ const UncontrolledForm: React.FC = () => {
           </label>
           <input className={classes.input} ref={inputNameRef} type="text" name="name" />
         </div>
-        <p className={classes.error}>not valid</p>
+        {formErrors?.name && <p className={classes.error}>not valid</p>}
       </div>
 
       <div className={classes.questionBox}>
