@@ -2,14 +2,12 @@ import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux'
 import { TypedUseSelectorHook } from 'react-redux'
 
-import controlledFormReducer from './reducers/controlledFormReducer';
-import uncontrolledFormReducer from './reducers/uncontrolledFormReducer';
+import FormReducer from './reducers/FormReducer';
 import countriesReducer from './reducers/countriesReducer';
 
 export const store = configureStore({
   reducer: {
-    controlledForm: controlledFormReducer,
-    uncontrolledForm: uncontrolledFormReducer,
+    form: FormReducer,
     countries: countriesReducer,
   },
 });

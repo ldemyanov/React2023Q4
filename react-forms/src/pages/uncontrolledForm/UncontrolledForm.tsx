@@ -1,55 +1,14 @@
 import React, { useCallback, useRef, useState } from 'react';
-import * as yup from 'yup';
-import classes from './style.module.css';
-import { useAppSelector } from '../../store/reduxStore';
-import { convertImageToBase64 } from '../../modules/image';
-
-type FormValues = {
-  name: string;
-  age: number;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  gender: string;
-  consentWithRules: boolean;
-  country: string;
-  img?: string;
-};
-
-type YupFormErrors = {
-  name?: boolean;
-  age?: boolean;
-  email?: boolean;
-  password?: boolean;
-  confirmPassword?: boolean;
-  gender?: boolean;
-  consentWithRules?: boolean;
-  country?: boolean;
-  img?: boolean;
-};
-
-interface YupError {
-  path: string;
-}
-
-const formSchema = yup.object().shape({
-  name: yup.string().required(),
-  age: yup.number().moreThan(1).required(),
-  email: yup.string().email().required(),
-  password: yup.string().min(8).required(),
-  confirmPassword: yup
-    .string()
-    .min(8)
-    .required()
-    .oneOf([yup.ref('password')]),
-  gender: yup.string().required(),
-  consentWithRules: yup.boolean().isTrue(),
-  country: yup.string().required(),
-});
-
+import classes from '../../styles/form.module.css';
+import { useAppDispatch, useAppSelector } from '../../store/reduxStore';
+import { convertImageToBase64, defaultImage } from '../../modules/image';
+import { setFormData } from '../../store/reducers/FormReducer';
+import { formSchema } from '../../modules/validation';
+import { FormFields, YupError, YupFormErrors } from '../../modules/types';
 
 const UncontrolledForm: React.FC = () => {
   const { countries } = useAppSelector((state) => state.countries);
+  const dispatch = useAppDispatch();
 
   const inputNameRef = useRef<HTMLInputElement>(null);
   const inputAgeRef = useRef<HTMLInputElement>(null);
@@ -65,47 +24,51 @@ const UncontrolledForm: React.FC = () => {
 
   const changeImgFile = async (event: React.BaseSyntheticEvent) => {
     const base64Image = (await convertImageToBase64(event.target.files[0])) as string;
-    imgRef.current?.setAttribute("src", base64Image);
+    imgRef.current?.setAttribute('src', base64Image);
   };
 
   const changeGender = useCallback((event: React.BaseSyntheticEvent) => {
     inputGenderRef.current = event.target.value;
   }, []);
 
-  const formSubmit = useCallback(async (event: React.SyntheticEvent) => {
-    event.preventDefault();
+  const formSubmit = useCallback(
+    async (event: React.SyntheticEvent) => {
+      event.preventDefault();
 
-    const values: FormValues = {
-      name: inputNameRef.current?.value ?? '',
-      age: Number(inputAgeRef.current?.value ?? 0),
-      email: inputEmailRef.current?.value ?? '',
-      password: inputPasswordRef.current?.value ?? '',
-      confirmPassword: inputConfirmPasswordRef.current?.value ?? '',
-      gender: inputGenderRef.current ?? '',
-      consentWithRules: !!inputTCRef.current?.checked,
-      country: inputCountryRef.current?.value ?? '',
-      img: imgRef.current?.src ?? '',
-    };
+      const values: FormFields = {
+        name: inputNameRef.current?.value ?? '',
+        age: Number(inputAgeRef.current?.value ?? 0),
+        email: inputEmailRef.current?.value ?? '',
+        password: inputPasswordRef.current?.value ?? '',
+        confirmPassword: inputConfirmPasswordRef.current?.value ?? '',
+        gender: inputGenderRef.current ?? '',
+        consentWithRules: !!inputTCRef.current?.checked as true, // TODO: remove type as true
+        country: inputCountryRef.current?.value ?? '',
+        img: imgRef.current?.src ?? defaultImage,
+      };
 
-    const isFormValid = await formSchema.isValid(values, {
-      abortEarly: false,
-    });
-
-    if (isFormValid) {
-      setFormErrors({});
-    } else {
-      formSchema.validate(values, { abortEarly: false }).catch((errors) => {
-        const yupErrors: YupFormErrors = errors.inner.reduce(
-          (acc: YupFormErrors, error: YupError) => ({
-            ...acc,
-            [error.path]: true,
-          }),
-          {}
-        );
-        setFormErrors(yupErrors);
+      const isFormValid = await formSchema.isValid(values, {
+        abortEarly: false,
       });
-    }
-  }, []);
+
+      if (isFormValid) {
+        setFormErrors({});
+        dispatch(setFormData(values));
+      } else {
+        formSchema.validate(values, { abortEarly: false }).catch((errors) => {
+          const yupErrors: YupFormErrors = errors.inner.reduce(
+            (acc: YupFormErrors, error: YupError) => ({
+              ...acc,
+              [error.path]: true,
+            }),
+            {}
+          );
+          setFormErrors(yupErrors);
+        });
+      }
+    },
+    [dispatch]
+  );
 
   return (
     <form className={classes.form} onSubmit={formSubmit}>
@@ -123,12 +86,13 @@ const UncontrolledForm: React.FC = () => {
 
       <div className={classes.questionBox}>
         <div className={classes.question}>
-          <label className={classes.label} htmlFor="age">
-            Age:
+          <label className={classes.label} htmlFor="image">
+            Image:
           </label>
-          <input className={classes.input} ref={inputAgeRef} type="number" name="age" />
+          <img ref={imgRef} className={classes.img} src={defaultImage} alt="" />
+          <input type="file" onChange={changeImgFile}></input>
         </div>
-        {formErrors?.age && <p className={classes.error}>not valid</p>}
+        {formErrors?.img && <p className={classes.error}>not valid image</p>}
       </div>
 
       <div className={classes.questionBox}>
@@ -164,6 +128,16 @@ const UncontrolledForm: React.FC = () => {
           />
         </div>
         {formErrors?.confirmPassword && <p className={classes.error}>not valid</p>}
+      </div>
+
+      <div className={classes.questionBox}>
+        <div className={classes.question}>
+          <label className={classes.label} htmlFor="age">
+            Age:
+          </label>
+          <input className={classes.input} ref={inputAgeRef} type="number" name="age" />
+        </div>
+        {formErrors?.age && <p className={classes.error}>not valid</p>}
       </div>
 
       <div className={classes.questionBox}>
@@ -205,18 +179,7 @@ const UncontrolledForm: React.FC = () => {
         {formErrors?.country && <p className={classes.error}>not valid</p>}
       </div>
 
-      <div className={classes.questionBox}>
-        <div className={classes.question}>
-          <label className={classes.label} htmlFor="image">
-            Image:
-          </label>
-          <img ref={imgRef} className={classes.img} src="https://fakeimg.pl/250x250/?text=Photo&font=lobster" alt="" />
-          <input type="file" onChange={changeImgFile}></input>
-        </div>
-        {formErrors?.img && <p className={classes.error}>not valid image</p>}
-      </div>
-
-      <input className={classes.button} type="submit" />
+      <button className={classes.button}>Send</button>
     </form>
   );
 };

@@ -15,14 +15,34 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.link {
+  padding: 15px;
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.link:first-child {
+  padding-left: 0;
+}
+
+.link:visited {
+  color: rgb(5, 132, 171);
+}
+
 .pendingLink {
-  color: blue;
+  color: white;
 }
 
 .activeLink {
-  color: red;
+  color: rgb(255, 255, 255);
 }
 
 .transitioningLink {
-  color: green;
+  color: white;
+}
+
+.header {
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgb(42, 57, 78);
+  margin-bottom: 20px;
 }

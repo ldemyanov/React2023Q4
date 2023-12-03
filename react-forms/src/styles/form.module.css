@@ -89,6 +89,16 @@
   transition: 0.3s ease;
 }
 
-.button:hover {
+input::file-selector-button {
+  background: inherit;
+  border-radius: 5px;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #283448;
+  transition: 0.3s ease;
+}
+
+.button:hover, input::file-selector-button:hover {
   background-color: #485c80;
 }

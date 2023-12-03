@@ -3,12 +3,13 @@ import { AppPath } from "../AppRouter";
 
 const Header: React.FC = () => {
   return (
-    <header>
+    <header className="header">
       <nav>
         <NavLink
           to={AppPath.Root}
           className={({ isActive, isPending, isTransitioning }) =>
             [
+              'link',
               isPending ? 'pendingLink' : '',
               isActive ? 'activeLink' : '',
               isTransitioning ? 'transitioningLink' : '',
@@ -21,6 +22,7 @@ const Header: React.FC = () => {
           to={AppPath.ControlledForm}
           className={({ isActive, isPending, isTransitioning }) =>
             [
+              'link',
               isPending ? 'pendingLink' : '',
               isActive ? 'activeLink' : '',
               isTransitioning ? 'transitioningLink' : '',
@@ -33,6 +35,7 @@ const Header: React.FC = () => {
           to={AppPath.UncontrolledForm}
           className={({ isActive, isPending, isTransitioning }) =>
             [
+              'link',
               isPending ? 'pendingLink' : '',
               isActive ? 'activeLink' : '',
               isTransitioning ? 'transitioningLink' : '',
