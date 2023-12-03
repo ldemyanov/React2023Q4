@@ -4,11 +4,13 @@ import { TypedUseSelectorHook } from 'react-redux'
 
 import controlledFormReducer from './reducers/controlledFormReducer';
 import uncontrolledFormReducer from './reducers/uncontrolledFormReducer';
+import countriesReducer from './reducers/countriesReducer';
 
 export const store = configureStore({
-  reducer: { 
+  reducer: {
     controlledForm: controlledFormReducer,
     uncontrolledForm: uncontrolledFormReducer,
+    countries: countriesReducer,
   },
 });
 
