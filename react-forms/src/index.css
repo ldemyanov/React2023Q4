@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: datk dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: rgb(13, 17, 23);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.link {
+  padding: 15px;
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.link:first-child {
+  padding-left: 0;
+}
+
+.link:visited {
+  color: rgb(5, 132, 171);
+}
+
+.pendingLink {
+  color: white;
+}
+
+.activeLink {
+  color: rgb(255, 255, 255);
+}
+
+.transitioningLink {
+  color: white;
+}
+
+.header {
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgb(42, 57, 78);
+  margin-bottom: 20px;
+}
